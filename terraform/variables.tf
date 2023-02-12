@@ -33,9 +33,10 @@ variable region {
   description = "Represents the environment used."
 }
 
-variable zone {
-  default = "us-east1-b"
-  description = "Represents the environment used."
+variable "zone" {
+  type = string
+  default = "us-east1-b"  
+  description = "zone for resoruces"
 }
 
 variable project {
