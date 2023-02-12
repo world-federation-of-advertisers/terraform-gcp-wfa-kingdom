@@ -33,7 +33,7 @@ variable region {
   description = "Represents the environment used."
 }
 
-variable Zone {
+variable zone {
   default = "us-east1-b"
   description = "Represents the environment used."
 }
