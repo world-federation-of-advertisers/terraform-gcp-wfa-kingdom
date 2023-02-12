@@ -33,6 +33,11 @@ variable region {
   description = "Represents the environment used."
 }
 
+variable Zone {
+  default = "us-east1-b"
+  description = "Represents the environment used."
+}
+
 variable project {
   default = "my-project-test-373810"
   description = "The project ID"
