@@ -2,7 +2,7 @@
 
 module "gke" {
   source                     = "terraform-google-modules/kubernetes-engine/google"
-  project_id                 = ""
+  project_id                 = "my-project-test-373810"
   name                       = "gke-test-1"
   region                     = "us-central1"
   ip_range_pods              = ""
