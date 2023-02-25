@@ -72,24 +72,16 @@ install_bazel(){
 }
 
 clone_repo(){
+  cd /tmp
   echo "Cloning the Repository"
   git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+  git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
 }
 
-bazel_build(){
-  echo "Executing command to Build"
-  cd /cross-media-measurement
-  bazelisk query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' | \
-    xargs bazelisk build -c opt --define container_registry=gcr.io \
-    --define image_repo_prefix=my-project-test-373810 --define image_tag=build-0004
-}
-
-bazel_push(){
-  echo "Executing command to Push the built image to GCR"
-  cd /cross-media-measurement
-  bazelisk query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' | \
-    xargs -n 1 bazelisk run -c opt --define container_registry=gcr.io \
-    --define image_repo_prefix=my-project-test-373810 --define image_tag=build-0004
+bazel_build_and_push(){
+  echo "Executing command to Build and push to GCR"
+  sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/build_image.sh /tmp/cross-media-measurement/build_image.sh
+  sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/push_image.sh /tmp/cross-media-measurement/push_image.sh
 }
 
 {
@@ -190,7 +182,7 @@ bazel_push(){
     printf " Installation logs in /tmp/bazel_installation.log \n"
   }
 
-  # Clone application code
+  # Clone application and Infra code
   {
     printf "\n Cloning repository cross-media-measurement..."
     clone_repo > /tmp/git_clone.log
