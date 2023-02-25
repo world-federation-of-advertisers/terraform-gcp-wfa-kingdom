@@ -1,0 +1,27 @@
+
+
+
+
+# make sure you get the binary available in $PATH
+  echo 'Bazel path:'
+  which bazel
+
+  sudo apt-get update
+  sudo apt-get upgrade -y
+  sudo apt-get install -y gnupg-curl
+
+{
+echo "Cloning the Repo"
+git clone https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+cd cross-media-measurement
+
+echo "Executing command to Build"
+bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' | \
+  xargs bazel build -c opt --define container_registry=gcr.io \
+  --define image_repo_prefix=my-project-test-373810 --define image_tag=build-0004
+
+echo "Executing command to push to ECR."
+bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' | \
+  xargs -n 1 bazel run -c opt --define container_registry=gcr.io \
+  --define image_repo_prefix=my-project-test-373810 --define image_tag=build-0004
+} > /tmp/startup.logs

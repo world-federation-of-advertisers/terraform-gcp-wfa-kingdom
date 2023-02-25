@@ -1,22 +1,27 @@
-/*
-
-What is this VM meant for.
-
-*/
 resource "google_compute_instance" "vm_instance" {
-  name = "${local.prefix}-vm-bazel-machine"
-  machine_type = "e2-medium"
-  zone = "us-central1-a"
+  name         = "${local.prefix}-vm-bazel-machine"
+  machine_type = "n1-standard-4"
+  zone         = "us-central1-a"
+  tags = ["vm", "tf", "http-server", "https-server"]
+
   boot_disk {
     initialize_params {
-      image = "debian-cloud/debian-11"
+      image = "debian-cloud/debian-10"
+      size = "50"
     }
   }
 
-  metadata_startup_script = data.template_file.user_data.rendered
-
   network_interface {
-    network = google_compute_network.vpc_network.name
-    access_config {}
+    network = "default"
+    access_config {
+    }
+  }
+  metadata_startup_script = "${file("packages.sh")}"
+}
+
+resource "null_resource" "deploy_files" {
+  triggers = {
+    dir_sha1 = sha1(filesha1("packages.sh"))
   }
 }
+
