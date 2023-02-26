@@ -84,6 +84,32 @@ bazel_build_and_push(){
   cd /tmp/cross-media-measurement
   sudo chmod +x /tmp/cross-media-measurement/build_image.sh
   sudo chmod +x /tmp/cross-media-measurement/push_image.sh
+  echo Y | sudo gcloud auth configure-docker
+
+  echo "* * * * * cd /tmp/cross-media-measurement && sudo ./build_image.sh" | sudo crontab -
+  sleep 15
+  logfile=$(sudo find /root/.cache/bazel/_bazel_root/ -name command.log)
+  if [ $logfile != "" ]; then
+    echo "Image build failed for some reason."
+    return 127
+  else
+    echo "Detailed Logs can be found in $logfile"
+    until completed
+    do
+      sudo grep "Build completed successfully," $logfile
+      if [ $? -ne 0 ]; then
+        date
+        echo "$(date) - $(tail -1 $logfile)"
+        echo "Sleeping for 1 minute... check again in 1 minutes."
+        sleep 60
+        continue
+      else
+        echo "Completed Image Build Successfully. Triggered the push"
+        completed=1
+      fi
+    done
+  fi
+
 }
 
 {
@@ -199,32 +225,16 @@ bazel_build_and_push(){
 
   # Bazel  build and Push
   {
-    bazel_build_and_push
-    echo "* * * * * cd /tmp/cross-media-measurement && sudo ./build_image.sh" | sudo crontab -
-    completed=0
-    started=0
-    until completed
-    do
-      ps -ef | grep bazel| grep -v grep | grep "bazel(cross-media-measurement)"
-      if [ $? -eq 0 ]; then
-        started=1
-        echo date
-        echo "Sleeping for a minute..."
-        sleep 60
-        continue
-      else
-        if [ $started -eq 1 ]; then
-          echo "Completed Image Build Successfully"
-          completed=1
-        else
-          echo "Could not start the script"
-        fi
-      fi
-    done
-
+    bazel_build_and_push > /tmp/build_and_push_image.log
+    if [ $? -eq 0 ]; then
+      echo "Cloned application code Successfully"
+    else
+      echo "git clone failed $?"
+      exit $?
+    fi
     printf " Image creation Triggered in the background /tmp/build_image.log \n"
 
-  } >> /tmp/build_image.log
+  }
 
   printf "\n Initialization Completed successfully \n\n "
 
