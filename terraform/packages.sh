@@ -81,6 +81,7 @@ clone_repo(){
 bazel_build_and_push(){
   echo "Executing command to Build and push to GCR"
   sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/build_image.sh /tmp/cross-media-measurement/build_image.sh
+  sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/push_image.sh /tmp/cross-media-measurement/push_image.sh
   cd /tmp/cross-media-measurement
   sudo chmod +x /tmp/cross-media-measurement/build_image.sh
   sudo chmod +x /tmp/cross-media-measurement/push_image.sh
@@ -88,8 +89,7 @@ bazel_build_and_push(){
 
   echo "* * * * * cd /tmp/cross-media-measurement && sudo ./build_image.sh" | sudo crontab -
   echo "Waiting on crontab to be picked..."
-  sleep 61
-
+  sleep 120
   logfile=$(sudo find /root/.cache/bazel/_bazel_root/ -name command.log)
   if [ $logfile != "" ]; then
     echo "Image build failed for some reason."
