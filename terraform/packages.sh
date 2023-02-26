@@ -81,9 +81,9 @@ clone_repo(){
 bazel_build_and_push(){
   echo "Executing command to Build and push to GCR"
   sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/build_image.sh /tmp/cross-media-measurement/build_image.sh
-  sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/push_image.sh /tmp/cross-media-measurement/push_image.sh
   cd /tmp/cross-media-measurement
-  chmod +x build_image.sh
+  sudo chmod +x /tmp/cross-media-measurement/build_image.sh
+  sudo chmod +x /tmp/cross-media-measurement/push_image.sh
 }
 
 {
@@ -199,9 +199,33 @@ bazel_build_and_push(){
 
   # Bazel  build and Push
   {
-    echo "* * * * * /tmp/cross-media-measurement/build_image.sh > /tmp/build_image.log" | sudo crontab -
+    bazel_build_and_push
+    echo "* * * * * cd /tmp/cross-media-measurement && sudo ./build_image.sh" | sudo crontab -
+    completed=0
+    started=0
+    until completed
+    do
+      ps -ef | grep bazel| grep -v grep | grep "bazel(cross-media-measurement)"
+      if [ $? -eq 0 ]; then
+        started=1
+        echo date
+        echo "Sleeping for a minute..."
+        sleep 60
+        continue
+      else
+        if [ $started -eq 1 ]; then
+          echo "Completed Image Build Successfully"
+          completed=1
+        else
+          echo "Could not start the script"
+        fi
+      fi
+    done
+
     printf " Image creation Triggered in the background /tmp/build_image.log \n"
-  }
+
+  } >> /tmp/build_image.log
+
   printf "\n Initialization Completed successfully \n\n "
 
 } > /tmp/init_script.log

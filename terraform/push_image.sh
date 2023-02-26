@@ -1,5 +1,6 @@
 #!/bin/bash
 set -x && chmod +x
+sudo crontab -r
 
 cd /tmp/cross-media-measurement
 
