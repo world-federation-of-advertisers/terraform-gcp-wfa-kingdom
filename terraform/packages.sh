@@ -87,7 +87,9 @@ bazel_build_and_push(){
   echo Y | sudo gcloud auth configure-docker
 
   echo "* * * * * cd /tmp/cross-media-measurement && sudo ./build_image.sh" | sudo crontab -
-  sleep 15
+  echo "Waiting on crontab to be picked..."
+  sleep 61
+
   logfile=$(sudo find /root/.cache/bazel/_bazel_root/ -name command.log)
   if [ $logfile != "" ]; then
     echo "Image build failed for some reason."
@@ -104,11 +106,12 @@ bazel_build_and_push(){
         sleep 60
         continue
       else
-        echo "Completed Image Build Successfully. Triggered the push"
+        echo "Completed Image Build Successfully"
         completed=1
       fi
     done
   fi
+
 
 }
 
@@ -226,12 +229,6 @@ bazel_build_and_push(){
   # Bazel  build and Push
   {
     bazel_build_and_push > /tmp/build_and_push_image.log
-    if [ $? -eq 0 ]; then
-      echo "Cloned application code Successfully"
-    else
-      echo "git clone failed $?"
-      exit $?
-    fi
     printf " Image creation Triggered in the background /tmp/build_image.log \n"
 
   }
