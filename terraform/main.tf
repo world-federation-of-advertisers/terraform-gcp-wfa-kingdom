@@ -9,10 +9,10 @@ provider "google" {
 }
 
 
-terraform {
-  backend "gcs" {
-  }
-}
+#terraform {
+#  backend "gcs" {
+#  }
+#}
 
 
 

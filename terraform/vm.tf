@@ -3,6 +3,7 @@ resource "google_compute_instance" "vm_instance" {
   machine_type = "n1-standard-4"
   zone         = "us-central1-a"
   tags = ["vm", "tf", "http-server", "https-server"]
+  allow_stopping_for_update = true
 
   boot_disk {
     initialize_params {

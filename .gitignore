@@ -28,6 +28,6 @@ override.tf.json
 # Include tfplan files to ignore the plan output of command: terraform plan -out=tfplan
 # example: *tfplan*
 /terraform/gke/.terraform.lock.hcl
-/terraform/my-project-test-373810-29f3318175bd.json
+/terraform/*.json
 /terraform/.terraform.lock.hcl
 /terraform/*_tfplan

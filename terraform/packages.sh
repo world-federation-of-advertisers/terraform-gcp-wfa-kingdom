@@ -82,6 +82,8 @@ bazel_build_and_push(){
   echo "Executing command to Build and push to GCR"
   sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/build_image.sh /tmp/cross-media-measurement/build_image.sh
   sudo cp -rf /tmp/terraform-gcp-wfa-kingdom/terraform/push_image.sh /tmp/cross-media-measurement/push_image.sh
+  cd /tmp/cross-media-measurement
+  chmod +x build_image.sh
 }
 
 {
@@ -195,6 +197,11 @@ bazel_build_and_push(){
     printf " Clone logs in /tmp/git_clone.log \n"
   }
 
+  # Bazel  build and Push
+  {
+    echo "* * * * * /tmp/cross-media-measurement/build_image.sh > /tmp/build_image.log" | sudo crontab -
+    printf " Image creation Triggered in the background /tmp/build_image.log \n"
+  }
   printf "\n Initialization Completed successfully \n\n "
 
 } > /tmp/init_script.log

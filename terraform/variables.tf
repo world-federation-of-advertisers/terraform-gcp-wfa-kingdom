@@ -57,12 +57,12 @@ variable region {
 }
 
 variable project {
-  default = "my-project-test-373810"
+  default = "halo-cmm-sandbox"
   description = "The project ID"
 }
 
 variable "project_id" {
-  default = "my-project-test-373810"
+  default = "halo-cmm-sandbox"
   description = "Project ID"
 }
 variable "zone" {
