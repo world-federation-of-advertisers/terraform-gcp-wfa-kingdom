@@ -227,7 +227,7 @@ bazel_push(){
       echo "git clone failed $?"
       exit $?
     fi
-    printf " Clone logs in /tmp/git_clone.log \n"
+    printf " Clone logs in /tmp/git_clone.log \n\n"
   }
 
   # Bazel build
@@ -240,8 +240,8 @@ bazel_push(){
   # Bazel Push
   {
     Printf " Consolidating results to Push the Image..."
-    sleep 30
-    echo "* * * * * cd /tmp/cross-media-measurement && sudo ./push_image.sh >> /tmp/push_image.log" | sudo crontab -
+    bazel_push > /tmp/push_image.log
+    printf " Quite Likely push completed. \n"
   }
 
   printf "\n Initialization Completed successfully \n\n "
