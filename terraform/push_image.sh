@@ -7,6 +7,7 @@ cd /tmp/cross-media-measurement
 echo "[core]" > /root/.config/gcloud/configurations/config_default
 echo "account = mohanraj.dharmalingam@zealsols.com" >> /root/.config/gcloud/configurations/config_default
 echo "project = halo-cmm-sandbox" >>  /root/.config/gcloud/configurations/config_default
+sudo gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://eu.gcr.io
 
 echo "Executing command to Push the built image to GCR"
 echo Y | sudo gcloud auth configure-docker

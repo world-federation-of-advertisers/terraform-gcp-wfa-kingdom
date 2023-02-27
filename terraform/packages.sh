@@ -112,7 +112,7 @@ bazel_build(){
   done
 }
 
-bazel_build(){
+bazel_push(){
   echo "Executing command to push to GCR"
   sleep 30
   echo "* * * * * cd /tmp/cross-media-measurement && sudo ./push_image.sh" | sudo crontab -
@@ -234,7 +234,7 @@ bazel_build(){
   {
     printf " Image creation Triggered in the background /tmp/build_image.log \n"
     bazel_build > /tmp/build_image.log
-    printf " Quite Likely completed. \n"
+    printf " Quite Likely completed. \n\n"
   }
 
   # Bazel Push
