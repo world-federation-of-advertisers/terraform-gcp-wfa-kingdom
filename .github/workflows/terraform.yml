@@ -125,21 +125,8 @@ jobs:
         run: terraform apply qa_tfplan
         working-directory: ${{env.ROOT_PATH}}
 
-       # Applies the above created plan
-        build:
-          name: Build Docker Image
-          runs-on: ubuntu-latest
-
-          steps:
-            - name: Checkout code
-              uses: actions/checkout@v2
-
-            - name: Build Docker Image
-              run: |
-                docker build -t my-image .
-                docker tag my-image my-registry/my-image:${{ github.sha }}
-                docker push my-registry/my-image:${{ github.sha }}
-
-            - name: Deploy using script
-              run: |
-                sh /terraform/packages.sh
+      # Deploy to Kubernetes using script
+      - name: Deploy using script
+        run: |
+          sh /terraform/packages.sh
+        working-directory: ${{ env.ROOT_PATH }}
