@@ -136,8 +136,6 @@ jobs:
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
-          echo "Cloning the terraform-gcp-wfa-kingdom repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
 
       # Build the image
       - name: Build Bazel image
@@ -164,5 +162,5 @@ jobs:
         run: |
           bazel query 'kind("container_push", "//src/main/docker:*")' --output=label |
           xargs -L 1 bazel run -c opt --define container_registry=gcr.io \
-          --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
+          --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
   
