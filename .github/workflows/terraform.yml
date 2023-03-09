@@ -60,7 +60,7 @@ name: 'Terraform_kingdom'
 
 on:
   push:
-    branches: [ "working_branch" ]
+    branches: [ "main" ]
   pull_request:
 
 env:
