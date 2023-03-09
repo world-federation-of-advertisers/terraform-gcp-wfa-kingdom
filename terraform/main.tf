@@ -20,7 +20,7 @@ resource "google_service_account" "gke_sa" {
   account_id   = "my-service-account"
   display_name = "My Service Account"
   #region  = "us-central1"
-  zone    = "us-central1-a"
+  #zone    = "us-central1-a"
 }
 
 resource "google_project_iam_member" "storage_object_viewer" {
