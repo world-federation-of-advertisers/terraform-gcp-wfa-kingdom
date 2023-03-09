@@ -1,3 +1,17 @@
+# Copyright 2023 The Cross-Media Measurement Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
 # This workflow installs the latest version of Terraform CLI and configures the Terraform CLI configuration file
 # with an API token for Terraform Cloud (app.terraform.io). On pull request events, this workflow will run
 # `terraform init`, `terraform fmt`, and `terraform plan` (speculative plan via Terraform Cloud). On push events
@@ -50,7 +64,7 @@ on:
   pull_request:
 
 env:
-  GCP_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
+  GCP_CREDENTIALS: '${{ secrets.GCP_KINGDOM }}'
   ROOT_PATH: '${{ github.workspace }}/terraform'
 
 permissions:
@@ -84,9 +98,13 @@ jobs:
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
 
+      # Echo "Halo world"
+      - name: print greetings
+        run: echo "Halo world"
+
       # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
       - name: Terraform Init
-        run:  terraform init -backend-config=state-lock-config-qa.properties -reconfigure
+        run:  terraform init
         working-directory: ${{env.ROOT_PATH}}
 
       # Checks that all Terraform configuration files adhere to a canonical format
@@ -107,7 +125,15 @@ jobs:
         run: terraform apply qa_tfplan
         working-directory: ${{env.ROOT_PATH}}
 
-      # Destroy the infra created.
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve
-        working-directory: ${{env.ROOT_PATH}}
+        name: Build and Push
+        on: [push]
+
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+            steps:
+              - name: Checkout
+                uses: actions/checkout@v2
+              - name: Execute build script
+                run: |
+                  bash /terraform/packages.sh
