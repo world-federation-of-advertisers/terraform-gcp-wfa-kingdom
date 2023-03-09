@@ -141,7 +141,7 @@ jobs:
 
       # Build the image
       - name: Build Bazel image
-        working-directory: ${{env.ROOT_PATH}}
+        working-directory: /tmp/cross-media-measurement
         run: |
           mkdir -p src/main/docker
           bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
