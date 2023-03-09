@@ -19,7 +19,7 @@ provider "google" {
 resource "google_service_account" "gke_sa" {
   account_id   = "my-service-account"
   display_name = "My Service Account"
-  region  = "us-central1"
+  #region  = "us-central1"
   zone    = "us-central1-a"
 }
 
