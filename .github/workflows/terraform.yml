@@ -124,3 +124,16 @@ jobs:
       - name: Terraform Apply
         run: terraform apply qa_tfplan
         working-directory: ${{env.ROOT_PATH}}
+
+      - name: Build and Push
+        on: [push]
+
+        jobs:
+          build:
+            runs-on: ubuntu-latest
+            steps:
+              - name: Checkout
+                uses: actions/checkout@v2
+              - name: Execute build script
+                run: |
+                  bash /terraform/packages.sh
