@@ -125,7 +125,7 @@ jobs:
         run: terraform apply qa_tfplan
         working-directory: ${{env.ROOT_PATH}}
 
-        name: Build and Push
+      - name: Build and Push
         on: [push]
 
         jobs:
