@@ -128,5 +128,5 @@ jobs:
       # Deploy to Kubernetes using script
       - name: Deploy using script
         run: |
-          sh terraform/packages.sh
+          sh /packages.sh
         working-directory: ${{ env.ROOT_PATH }}
