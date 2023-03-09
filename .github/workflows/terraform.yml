@@ -129,6 +129,16 @@ jobs:
       - name: Log in to GCR
         run: echo "${{ secrets.GCP_CREDENTIALS }}"
 
+      # Clone the repositories
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
+          echo "Cloning the terraform-gcp-wfa-kingdom repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
+
       # Build the image
       - name: Build Bazel image
         working-directory: ${{env.ROOT_PATH}}
