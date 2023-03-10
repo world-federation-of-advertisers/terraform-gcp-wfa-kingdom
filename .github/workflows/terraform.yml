@@ -155,6 +155,9 @@ jobs:
       #        xargs -n 1 bazel run -c opt --define container_registry=gcr.io \
       #        --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
 
+      # Applies the above created plan
+      - name: Log in to GCR
+        run: echo "${{ secrets.GCR_CREDENTIALS }}"
 
       # Push the image
       - name: Push Bazel image
