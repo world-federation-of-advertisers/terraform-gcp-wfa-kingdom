@@ -151,5 +151,5 @@ jobs:
         # Push the image
       - name: Push image
         run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-               xargs -n 1 bazel run -c opt --define container_registry=gcr.io \
+               xargs -l 1 bazel run -c opt --define container_registry=gcr.io \
                --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
