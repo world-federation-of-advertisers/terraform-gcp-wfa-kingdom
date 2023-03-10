@@ -140,8 +140,8 @@ jobs:
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
-     #     echo "Cloning the terraform-gcp-wfa-kingdom repository"
-      #    git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
+          echo "Cloning the terraform-gcp-wfa-kingdom repository"
+          git clone -b terraform-duchy https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
 
       # Build the image
    #   - name: Build Bazel image
