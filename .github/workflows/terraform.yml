@@ -127,12 +127,8 @@ jobs:
 
       # Applies the above created plan
       - name: Terraform Apply
-        run: terraform apply qa_tfplan
+        run: terraform apply
         working-directory: ${{env.ROOT_PATH}}
-
-      # Applies the above created plan
-      - name: Log in to GCR
-        run: echo "${{ secrets.GCP_CREDENTIALS }}"
 
       # Clone the repositories
       - name: Clone repositories
