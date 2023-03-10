@@ -140,10 +140,7 @@ jobs:
           echo "Cloning the cross-media-measurement repository"
           git clone https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
-      #    echo "Cloning the terraform-gcp-wfa-kingdom repository"
-       #   git clone -b terraform-duchy https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
 
-      # Build the image
    #   - name: Build Bazel image
    #     working-directory: /tmp/cross-media-measurement
    #    run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
