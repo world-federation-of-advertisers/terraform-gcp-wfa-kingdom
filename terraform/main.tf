@@ -16,15 +16,3 @@ provider "google" {
   project = "halo-cmm-sandbox"
 }
 
-resource "google_service_account" "gke_sa" {
-  account_id   = "my-service-account"
-  display_name = "My Service Account"
-  #region  = "us-central1"
-  #zone    = "us-central1-a"
-}
-
-resource "google_project_iam_member" "storage_object_viewer" {
-  project = "halo-cmm-sandbox"
-  role    = "roles/storage.objectViewer"
-  member  = "serviceAccount:${google_service_account.gke_sa.email}"
-}
