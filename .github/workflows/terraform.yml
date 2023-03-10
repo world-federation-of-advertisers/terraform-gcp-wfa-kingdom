@@ -130,6 +130,9 @@ jobs:
     #    run: terraform apply
      #   working-directory: ${{env.ROOT_PATH}}
 
+      - name: Log in to GCR
+        run: echo "${{ secrets.GCR_CREDENTIALS }}"
+
       # Clone the repositories
       - name: Clone repositories
         run: |
@@ -147,8 +150,6 @@ jobs:
    #            xargs bazel build -c opt --define container_registry=gcr.io \
    #             --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
 
-      - name: Log in to GCR
-        run: echo "${{ secrets.GCR_CREDENTIALS }}"
 
         # Push the image
       - name: Push image
