@@ -74,7 +74,7 @@ permissions:
 jobs:
   terraform:
     name: 'Terraform Plan'
-    runs-on: ubuntu-20.4
+    runs-on: ubuntu-latest
     environment: production
 
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -153,6 +153,10 @@ jobs:
 
       - name: Log in to GCR
         run: echo "${{ secrets.GCR_CREDENTIALS }}"
+
+        # create a workspace
+      - name: creating workspace file
+        run: touch workspace
 
         # Push the image
       - name: Push image
