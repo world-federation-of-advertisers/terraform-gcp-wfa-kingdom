@@ -127,7 +127,7 @@ jobs:
 
       # Applies the above created plan
       - name: Log in to GCR
-        run: echo "${{ secrets.GCP_CREDENTIALS }}"
+        run: echo "${{ secrets.GCR_CREDENTIALS }}"
 
       # Clone the repositories
       - name: Clone repositories
