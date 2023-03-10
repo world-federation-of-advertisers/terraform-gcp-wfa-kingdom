@@ -137,27 +137,21 @@ jobs:
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
-          echo "Cloning the terraform-gcp-wfa-kingdom repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
+     #     echo "Cloning the terraform-gcp-wfa-kingdom repository"
+      #    git clone -b main https://github.com/world-federation-of-advertisers/terraform-gcp-wfa-kingdom.git
 
       # Build the image
-      - name: Build Bazel image
-        working-directory: /tmp/cross-media-measurement
-        run: |
-          cd src/main/docker
-          mkdir -p src/main/docker
-          cd ../..
-          bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-           xargs bazel build -c opt --define container_registry=gcr.io \
-           --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+   #   - name: Build Bazel image
+   #     working-directory: /tmp/cross-media-measurement
+   #    run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+   #            xargs bazel build -c opt --define container_registry=gcr.io \
+   #             --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
 
       - name: Log in to GCR
         run: echo "${{ secrets.GCR_CREDENTIALS }}"
 
         # Push the image
       - name: Push image
-        run: |
-          cd src/main/docker
-          bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-            xargs -n 1 bazel run -c opt --define container_registry=gcr.io \
-            --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+        run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+               xargs -n 1 bazel run -c opt --define container_registry=gcr.io \
+               --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
