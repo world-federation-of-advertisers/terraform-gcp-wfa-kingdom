@@ -159,6 +159,7 @@ jobs:
           registry: gcr.io
           image_name: php
           image_tag: latest
+          dockerfile: ./
 
       # Push the image
       #- name: Push Bazel image
