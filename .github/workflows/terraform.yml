@@ -64,7 +64,7 @@ on:
   pull_request:
 
 env:
-  GCP_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
+  GCP_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
   ROOT_PATH: '${{ github.workspace }}/terraform'
 
 permissions:
@@ -93,7 +93,7 @@ jobs:
       - name: 'Setting up GCP account Connection'
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: '${{ secrets.GCR_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
@@ -127,7 +127,8 @@ jobs:
 
       # Applies the above created plan
       - name: Log in to GCR
-        run: echo "${{ secrets.GCR_CREDENTIALS }}"
+        GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
+        registry: gcr.io
 
       # Clone the repositories
       - name: Clone repositories
@@ -157,7 +158,8 @@ jobs:
 
       # Applies the above created plan
       - name: Log in to GCR
-        run: echo "${{ secrets.GCR_CREDENTIALS }}"
+        GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
+        registry: gcr.io
 
       # Push the image
       - name: Push Bazel image
