@@ -134,15 +134,15 @@ jobs:
           cd cross-media-measurement
 
       # Build the image
-      - name: Build Bazel image
-        working-directory: /tmp/cross-media-measurement
-        run: |
-          cd src/main/docker
-          mkdir -p src/main/docker
-          cd ../..
-          bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
-          xargs bazel build -c opt --define container_registry=gcr.io \
-          --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
+      #- name: Build Bazel image
+      #  working-directory: /tmp/cross-media-measurement
+      #  run: |
+      #    cd src/main/docker
+      #    mkdir -p src/main/docker
+      #    cd ../..
+      #    bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
+      #    xargs bazel build -c opt --define container_registry=gcr.io \
+      #    --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
 
       # Push the image
       #- name: Push Bazel image
@@ -155,14 +155,15 @@ jobs:
       - name: Log in to GCR
         uses: ./
         with:
-          GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
+          gcloud_service_key: '${{ secrets.GCR_CREDENTIALS }}'
           registry: gcr.io
-
+          image_name: nginx:latest
+          image_tag: test-${{ github.sha }}, ${{ github.sha }}
 
       # Push the image
-      - name: Push Bazel image
-        working-directory: /tmp/cross-media-measurement
-        run: |
-          bazel query 'kind("container_push", "//src/main/docker:*")' --output=label |
-          xargs -L 1 bazel run -c opt --define container_registry=gcr.io \
-          --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+      #- name: Push Bazel image
+      #  working-directory: /tmp/cross-media-measurement
+      #  run: |
+      #    bazel query 'kind("container_push", "//src/main/docker:*")' --output=label |
+      #    xargs -L 1 bazel run -c opt --define container_registry=gcr.io \
+      #    --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
