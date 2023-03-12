@@ -153,7 +153,7 @@ jobs:
 
       # Applies the above created plan
       - name: Log in to GCR
-        uses: ./
+        uses: RafikFarhad/push-to-gcr-github-action@v4.1
         with:
           gcloud_service_key: '${{ secrets.GCR_CREDENTIALS }}'
           registry: gcr.io
