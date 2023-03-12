@@ -59,7 +59,7 @@
 name: 'Terraform_kingdom'
 
 on:
-  push:
+  release:
     branches: [ "main" ]
   pull_request:
 
