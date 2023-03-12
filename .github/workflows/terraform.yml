@@ -125,11 +125,6 @@ jobs:
         run: terraform apply qa_tfplan
         working-directory: ${{env.ROOT_PATH}}
 
-      # Applies the above created plan
-      - name: Log in to GCR
-        GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
-        registry: gcr.io
-
       # Clone the repositories
       - name: Clone repositories
         run: |
@@ -158,8 +153,10 @@ jobs:
 
       # Applies the above created plan
       - name: Log in to GCR
-        GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
-        registry: gcr.io
+        uses: ./
+        with:
+          GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
+          registry: gcr.io
 
 
       # Push the image
