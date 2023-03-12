@@ -157,9 +157,8 @@ jobs:
         with:
           gcloud_service_key: '${{ secrets.GCR_CREDENTIALS }}'
           registry: gcr.io
-          image_name: nginx
+          image_name: php
           image_tag: latest
-          push_only: true
 
       # Push the image
       #- name: Push Bazel image
