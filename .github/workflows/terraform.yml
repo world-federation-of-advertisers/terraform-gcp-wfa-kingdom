@@ -161,6 +161,7 @@ jobs:
         GCR_CREDENTIALS: '${{ secrets.GCR_CREDENTIALS }}'
         registry: gcr.io
 
+
       # Push the image
       - name: Push Bazel image
         working-directory: /tmp/cross-media-measurement
