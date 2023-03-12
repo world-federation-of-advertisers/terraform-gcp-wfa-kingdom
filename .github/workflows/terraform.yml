@@ -152,13 +152,14 @@ jobs:
       #        --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
 
       # Applies the above created plan
-      - name: Log in to GCR
+      - name: Push image
         uses: RafikFarhad/push-to-gcr-github-action@v4.1
         with:
           gcloud_service_key: '${{ secrets.GCR_CREDENTIALS }}'
           registry: gcr.io
-          image_name: nginx:latest
-          image_tag: test-${{ github.sha }}, ${{ github.sha }}
+          image_name: nginx
+          image_tag: latest
+          push_only: true
 
       # Push the image
       #- name: Push Bazel image
