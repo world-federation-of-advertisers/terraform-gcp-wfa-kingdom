@@ -121,9 +121,9 @@ jobs:
         working-directory: ${{env.ROOT_PATH}}
 
       # Applies the above created plan
-      - name: Terraform Apply
-        run: terraform apply qa_tfplan
-        working-directory: ${{env.ROOT_PATH}}
+   #   - name: Terraform Apply
+  #    run: terraform apply qa_tfplan
+   #     working-directory: ${{env.ROOT_PATH}}
 
       # Clone the repositories
       - name: Clone repositories
