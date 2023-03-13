@@ -60,7 +60,7 @@ name: 'Terraform_duchy'
 
 on:
   push:
-    branches: [ "main" ]
+    branches: [ "terraform-duchy" ]
   pull_request:
 
 env:
