@@ -56,12 +56,11 @@
 #       with:
 #         cli_config_credentials_token: ${{ secrets.TF_API_TOKEN }}
 
-name: 'GitHub Actions for Duchy'
+name: 'Terraform_duchy'
 
 on:
-
   push:
-    branches: [ "terraform-duchy" ]
+    branches: [ "main" ]
   pull_request:
 
 env:
@@ -83,10 +82,6 @@ jobs:
         shell: bash
 
     steps:
-    # Prints "Halo World"
-      - name: Greetings
-        run: echo "Halo-World!"
-
       # Checkout the repository to the GitHub Actions runner
       - name: Checkout
         uses: actions/checkout@v3
@@ -98,7 +93,7 @@ jobs:
       - name: 'Setting up GCP account Connection'
         uses: 'google-github-actions/auth@v1'
         with:
-          credentials_json: '${{ env.GCP_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: 'Set up Cloud SDK'
         uses: 'google-github-actions/setup-gcloud@v1'
@@ -126,30 +121,37 @@ jobs:
         working-directory: ${{env.ROOT_PATH}}
 
       # Applies the above created plan
-   #   - name: Terraform Apply
-    #    run: terraform apply
-     #   working-directory: ${{env.ROOT_PATH}}
-
-      - name: Log in to GCR
-        run: echo "${{ secrets.GCR_CREDENTIALS }}"
+      - name: Terraform Apply
+        run: terraform apply qa_tfplan
+        working-directory: ${{env.ROOT_PATH}}
 
       # Clone the repositories
       - name: Clone repositories
         run: |
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
-          git clone https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd /tmp/cross-media-measurement
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
 
-   #   - name: Build Bazel image
-   #     working-directory: /tmp/cross-media-measurement
-   #    run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-   #            xargs bazel build -c opt --define container_registry=gcr.io
-   #             --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+      # Build the image
+      - name: Build Bazel image
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          cd src/main/docker
+          mkdir -p src/main/docker
+          cd ../..
+          bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+          xargs bazel build -c opt --define container_registry=gcr.io \
+          --define image_repo_prefix=halo-cmm-sandbox --define image_tag=build-0001
 
+      # Login to GCR
+      - name: Login to GCR
+        run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
 
-        # Push the image
-      - name: Push image
-        run: bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-               xargs -l 1 bazel run -c opt --define container_registry=gcr.io \
-               --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+      # Push the image
+      - name: Push Bazel image
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel query 'kind("container_push", "//src/main/docker:*")' --output=label |
+          xargs -L 1 bazel run -c opt --define container_registry=gcr.io \
+          --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
