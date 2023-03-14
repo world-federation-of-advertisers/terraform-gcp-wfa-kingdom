@@ -32,11 +32,10 @@ jobs:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: Authenticate with GCP
-        uses: GoogleCloudPlatform/github-actions/setup-gcloud@master
+      - name: 'Setting up GCP account Connection'
+        uses: 'google-github-actions/auth@v1'
         with:
-          project_id: "halo-cmm-sandbox"
-          service_account_key: ${{ env.GCP_CREDENTIALS }}
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: Build Kingdom dev manifest
         run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-${{ github.run_number }}
