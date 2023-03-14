@@ -19,41 +19,26 @@ on:
     branches: [ "main" ]
   pull_request:
 
-env:
-  GCP_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
-
-permissions:
-  contents: read
-
 jobs:
-  build-and-deploy:
+  deploy:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout source code
-        uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-      - name: Create workspace directory
-        run: mkdir workspace
-
+      # Authenticate with GCP using a service account key
       - name: 'Setting up GCP account Connection'
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Set up Bazel
-        uses: bazelbuild/setup-bazelisk@v1
-        with:
-          version: 'latest'
+      # Build the K8s manifest using Bazel
+      - name: Build K8s manifest
+        run: |
+          bazel build //src/main/k8s/dev:kingdom_gke \
+            --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
+            --define image_tag=build-0001
 
-      - name: Change working directory to root of the repository
-        run: cd $GITHUB_WORKSPACE
-
-      - name: Build Kingdom dev manifest
-        run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-0001
-
-      - name: Archive manifest as artifact
-        uses: actions/upload-artifact@v2
-        with:
-          name: kingdom-manifest
-          path: bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
-
+      # Deploy the K8s manifest to the cluster
+      - name: Deploy K8s manifest
+        run: |
+          kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
