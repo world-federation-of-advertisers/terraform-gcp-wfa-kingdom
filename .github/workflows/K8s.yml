@@ -10,7 +10,7 @@
 name: creating k8s manifest
 
 on:
-  release:
+  push:
     branches: [ "terraform-duchy" ]
 
 env:
