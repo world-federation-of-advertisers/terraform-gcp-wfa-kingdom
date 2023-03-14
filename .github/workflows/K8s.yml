@@ -11,8 +11,7 @@ name: Build and Deploy to GKE
 
 on:
   push:
-    branches:
-      - main
+    branches: [ "terraform-duchy" ]
 
 env:
   PROJECT_ID: '${{ vars.PROJECT }}'
@@ -23,7 +22,7 @@ env:
 
 jobs:
   setup-build-publish-deploy:
-    name: Setup, Build, Publish, and Deploy
+    name: Deploy
     runs-on: ubuntu-20.04
     environment: production
 
