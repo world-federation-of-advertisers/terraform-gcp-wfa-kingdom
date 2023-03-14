@@ -26,29 +26,31 @@ permissions:
   contents: read
 
 jobs:
-  build-and-deploy:
+  build:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout source code
         uses: actions/checkout@v2
 
-      - name: 'Setting up GCP account Connection'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      - name: Create workspace directory
-        run: mkdir workspace
-
-      - name: Update path to workspace directory
-        run: export PATH="$PATH:$GITHUB_WORKSPACE/workspace"
+      - name: Set up Bazel and create workspace
+        run: |
+          sudo apt-get install curl
+          curl -fsSL https://bazel.build/bazel-release.pub.gpg | gpg --dearmor > bazel.gpg
+          sudo mv bazel.gpg /etc/apt/trusted.gpg.d/
+          echo "deb [arch=amd64] https://storage.googleapis.com/bazel-apt stable jdk1.8" | sudo tee /etc/apt/sources.list.d/bazel.list
+          sudo apt-get update && sudo apt-get install bazel
+          mkdir workspace
+          echo "startup --output_user_root=/github/workspace/.cache/bazel" > workspace/.bazelrc
+          echo "build --disk_cache=/github/workspace/.cache/bazel" >> workspace/.bazelrc
+          echo "build --symlink_prefix=/github/workspace" >> workspace/.bazelrc
 
       - name: Build Kingdom dev manifest
-        working-directory: $GITHUB_WORKSPACE/workspace
+        working-directory: ./workspace
         run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-0001
 
       - name: Archive manifest as artifact
         uses: actions/upload-artifact@v2
         with:
           name: kingdom-manifest
-          path: $GITHUB_WORKSPACE/workspace/bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
+          path: ./workspace/bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
+
