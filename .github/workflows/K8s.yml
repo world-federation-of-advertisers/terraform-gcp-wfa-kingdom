@@ -53,9 +53,6 @@ jobs:
       # Create k8s manifest
       - name: Build K8s manifest
         run: |
-          mkdir -p src/main/k8s
-          cd src/main/k8s
-          cd ../..
           bazel build //src/main/k8s/dev:worker1_duchy_gke \
           --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
           --define duchy_cert_id=SVVse4xWHL0 \
