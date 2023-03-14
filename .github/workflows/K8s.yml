@@ -30,8 +30,12 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Change working directory
-        run: cd cross-media-measurement
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
 
       - name: Setting up GCP account Connection
         uses: google-github-actions/auth@v1
@@ -60,6 +64,6 @@ jobs:
 
       # Deploy the Docker image to the GKE cluster
    #   - name: Deploys
-    #      --define duchy_cert_id=SVVse4xWHL0 \
+    #      --define duchy_cert_id=SVVse4xWH L0 \
       #    --define duchy_storage_bucket=worker1-duchy \
        #   --define image_tag=build-0001
