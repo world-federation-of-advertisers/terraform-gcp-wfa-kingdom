@@ -23,13 +23,6 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      - name: Clone repositories
-        run: |
-          cd /tmp
-          echo "Cloning the cross-media-measurement repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd /tmp/cross-media-measurement
-
       - name: Setting up GCP account Connection
         uses: google-github-actions/auth@v1
         with:
@@ -43,13 +36,19 @@ jobs:
       - run: |
           gcloud --quiet auth configure-docker
 
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd /tmp/cross-media-measurement
+
       # Create k8s manifest
       - name: Build K8s manifest
         run: |
           mkdir -p src/main/kube
           cd src/main/kube
           cd ../../..
-          touch workspace
           bazel build //src/main/k8s/dev:worker1_duchy_gke \
           --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
           --define duchy_cert_id=SVVse4xWHL0 \
