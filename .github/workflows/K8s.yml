@@ -65,15 +65,19 @@ jobs:
       #    docker push "gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA"
 
       # Set up kustomize
-      - name: Set up Kustomize
-        run: |-
-          curl https://github.com/world-federation-of-advertisers/cross-media-measurement/tree/main/src/main/k8s/dev/duchy_gke.cue
-          chmod u+x ./kustomize
+      - name: Build K8s manifest
+        run: |
+          cd src/main/k8s
+          mkdir -p src/main/k8s
+          cd ../..
+          bazel build //src/main/k8s/dev:worker1_duchy_gke \
+          --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
+          --define duchy_cert_id=SVVse4xWHL0 \
+          --define duchy_storage_bucket=worker1-duchy \
+          --define image_tag=build-0001
 
       # Deploy the Docker image to the GKE cluster
-      - name: Deploys
-        run: |-
-          ./kustomize edit set image gcr.io/PROJECT_ID/IMAGE:TAG=gcr.io/$PROJECT_ID/$IMAGE:$GITHUB_SHA
-          ./kustomize build . | kubectl apply -f -
-          kubectl rollout status deployment/$DEPLOYMENT_NAME
-          kubectl get services -o wide
+   #   - name: Deploys
+    #      --define duchy_cert_id=SVVse4xWHL0 \
+      #    --define duchy_storage_bucket=worker1-duchy \
+       #   --define image_tag=build-0001
