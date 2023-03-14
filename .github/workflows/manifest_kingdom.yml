@@ -38,7 +38,7 @@ jobs:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       - name: Build Kingdom dev manifest
-        run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-${{ github.run_number }}
+        run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-0001
 
       - name: Deploy Kingdom to Kubernetes cluster
         run: kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
