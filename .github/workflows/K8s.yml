@@ -14,7 +14,7 @@ on:
     branches: [ "terraform-duchy" ]
 
 env:
-  PROJECT_ID: '${{ secrets.PROJECT }}'
+  PROJECT_ID: halo-cmm-sandbox
   GKE_CLUSTER: duchy_cluster_1    # Add your cluster name here.
   GKE_ZONE: us-central1   # Add your cluster zone here.
   DEPLOYMENT_NAME: duchy_deployment # Add your deployment name here.
