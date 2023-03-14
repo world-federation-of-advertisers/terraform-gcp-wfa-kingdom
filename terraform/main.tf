@@ -15,4 +15,3 @@
 provider "google" {
   project = "halo-cmm-sandbox"
 }
-

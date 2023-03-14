@@ -1,0 +1,42 @@
+# Copyright 2023 The Cross-Media Measurement Authors
+#
+# Licensed under the Apache License, Version 2.0 (the "License");
+# you may not use this file except in compliance with the License.
+# You may obtain a copy of the License at
+#
+#      http://www.apache.org/licenses/LICENSE-2.0
+#
+# Unless required by applicable law or agreed to in writing, software
+# distributed under the License is distributed on an "AS IS" BASIS,
+# WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+# See the License for the specific language governing permissions and
+# limitations under the License.
+
+name: 'K8s manifest Kingdom'
+
+on:
+  push:
+    branches: [ "main" ]
+  pull_request:
+
+env:
+  GCP_CREDENTIALS: '${{ secrets.GCP_CREDENTIALS }}'
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+
+      - name: Build Kingdom dev manifest
+        run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-${{ github.run_number }}
+
+      - name: Archive manifest as artifact
+        uses: actions/upload-artifact@v2
+        with:
+          name: kingdom-manifest
+          path: bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
