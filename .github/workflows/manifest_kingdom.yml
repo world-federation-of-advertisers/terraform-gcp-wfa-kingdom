@@ -52,5 +52,3 @@ jobs:
         with:
           name: kingdom-manifest
           path: $GITHUB_WORKSPACE/workspace/bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
-
-
