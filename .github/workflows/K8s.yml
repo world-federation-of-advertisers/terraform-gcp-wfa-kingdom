@@ -28,7 +28,7 @@ jobs:
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd cross-media-measurement
+          cd /tmp/cross-media-measurement
 
       - name: Setting up GCP account Connection
         uses: google-github-actions/auth@v1
