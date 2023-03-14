@@ -13,13 +13,6 @@ on:
   push:
     branches: [ "terraform-duchy" ]
 
-env:
-  PROJECT_ID: halo-cmm-sandbox
-  GKE_CLUSTER: duchy_cluster_1    # Add your cluster name here.
-  GKE_ZONE: us-central1   # Add your cluster zone here.
-  DEPLOYMENT_NAME: duchy_deployment # Add your deployment name here.
-  IMAGE: static-site
-
 jobs:
   setup-build-publish-deploy:
     name: Deploy
@@ -53,6 +46,9 @@ jobs:
       # Create k8s manifest
       - name: Build K8s manifest
         run: |
+          mkdir -p src/main/k8s
+          cd src/main/k8s
+          cd ../..
           bazel build //src/main/k8s/dev:worker1_duchy_gke \
           --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
           --define duchy_cert_id=SVVse4xWHL0 \
