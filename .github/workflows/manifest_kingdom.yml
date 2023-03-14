@@ -48,6 +48,9 @@ jobs:
       - name: Change working directory to workspace
         run: cd workspace
 
+      - name: Copy source code to workspace
+        run: cp -r $GITHUB_WORKSPACE/* .
+
       - name: Build Kingdom dev manifest
         run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-0001
 
