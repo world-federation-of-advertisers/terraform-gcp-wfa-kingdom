@@ -1,0 +1,34 @@
+name: Build and Push Docker Image to GCP Container Registry
+
+on:
+  push:
+    branches:
+      - main
+
+env:
+  PROJECT_ID: '${{ vars.PROJECT }}'
+  IMAGE_NAME: duchy
+  IMAGE_TAG: build-0001
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-20.04
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v2
+
+      - name: Configure GCP credentials
+        uses: google-github-actions/setup-gcloud@master
+        with:
+          version: '327.0.0'
+          service_account_key: ${{ secrets.GCP_SA_KEY }}
+          project_id: ${{ env.PROJECT_ID }}
+
+      - name: Build and Push Docker Image
+        uses: docker/build-push-action@v2
+        with:
+          context: .
+          push: true
+          tags: |
+            gcr.io/${{ env.PROJECT_ID }}/${{ env.IMAGE_NAME }}:${{ env.IMAGE_TAG }}
