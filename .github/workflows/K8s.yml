@@ -67,7 +67,7 @@ jobs:
       # Set up kustomize
       - name: Set up Kustomize
         run: |-
-          curl -sfLo https://github.com/world-federation-of-advertisers/cross-media-measurement/tree/main/src/main/k8s/dev:duchy_gke.cue
+          curl -sfLo https://github.com/world-federation-of-advertisers/cross-media-measurement/tree/main/src/main/k8s/dev/duchy_gke.cue
           chmod u+x ./kustomize
 
       # Deploy the Docker image to the GKE cluster
