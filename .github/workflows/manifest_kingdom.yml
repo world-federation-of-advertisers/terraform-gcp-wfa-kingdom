@@ -36,17 +36,18 @@ jobs:
       - name: Create workspace directory
         run: mkdir workspace
 
-      - name: Move to workspace directory
-        run: cd workspace
-
       - name: 'Setting up GCP account Connection'
         uses: 'google-github-actions/auth@v1'
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
-      - name: Configure Docker CLI to use GCR
-        run: |
-          gcloud auth configure-docker -q
+      - name: Set up Bazel
+        uses: bazelbuild/setup-bazelisk@v1
+        with:
+          version: 'latest'
+
+      - name: Change working directory to workspace
+        run: cd workspace
 
       - name: Build Kingdom dev manifest
         run: bazel build //src/main/k8s/dev:kingdom_gke --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg --define image_tag=build-0001
