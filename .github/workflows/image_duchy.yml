@@ -52,9 +52,6 @@ jobs:
       # Build the image
       - name: Build Bazel image
         run: |
-          cd src/main/docker
-          mkdir -p src/main/docker
-          cd ../..
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs bazel build -c opt --define container_registry=gcr.io \
           --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
@@ -65,7 +62,4 @@ jobs:
 
       # Push the image
       - name: Push Bazel image
-        run: |
-          bazel query 'kind("container_push", "//src/main/docker:*")' --output=label |
-          xargs -L 1 bazel run -c opt --define container_registry=gcr.io \
-          --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+        run: bazel run //bazel:push_bazel_image --define=wfa-siyengar --define=image_tag=build-0001
