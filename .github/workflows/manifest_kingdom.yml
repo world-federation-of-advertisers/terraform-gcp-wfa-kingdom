@@ -51,8 +51,3 @@ jobs:
           bazel build //src/main/k8s/dev:kingdom_gke \
           --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
           --define image_tag=build-0001
-
-      # Deploy the K8s manifest to the cluster
-      #- name: Deploy K8s manifest
-      #  run: |
-      #    kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
