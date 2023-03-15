@@ -60,8 +60,8 @@ jobs:
       # Build the image
       - name: Build Bazel image
         run: |
-          cd src/main/docker
           mkdir -p src/main/docker
+          cd src/main/docker
           cd ../..
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs bazel build -c opt --define container_registry=gcr.io \
