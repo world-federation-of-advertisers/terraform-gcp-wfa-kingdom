@@ -16,7 +16,7 @@ name: 'Terraform Duchy'
 
 on:
   push:
-    branches: [ "feature/halo-duchy-release", "main" ]
+    branches: [ "terraform-duchy" ]
   pull_request:
 
 env:
