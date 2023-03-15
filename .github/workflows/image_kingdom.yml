@@ -61,8 +61,11 @@ jobs:
 
       # Build the image
       - name: Build Bazel image
+        working-directory: /tmp/cross-media-measurement
         run: |
           cd src/main/docker
+          mkdir -p src/main/docker
+          cd ../..
           bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
           xargs -I{} sh -c 'bazel build {} &&
             docker tag $(bazel info bazel-bin)/{}:latest docker.pkg.github.com/wfa-siyengar/terraform-gcp-wfa-kingdom/{}:latest &&
