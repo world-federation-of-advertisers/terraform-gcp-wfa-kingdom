@@ -42,9 +42,6 @@ jobs:
       - name: Build K8s manifest
         working-directory: /tmp/cross-media-measurement
         run: |
-          mkdir -p src/main/kube
-          cd src/main/kube
-          cd ../..
           bazel build //src/main/k8s/dev:worker1_duchy_gke \
           --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
           --define duchy_cert_id=SVVse4xWHL0 \

@@ -67,7 +67,7 @@ jobs:
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs -I{} sh -c 'bazel build {} &&
             docker tag $(bazel info bazel-bin)/{}:latest docker.pkg.github.com/wfa-siyengar/terraform-gcp-wfa-kingdom/{}:latest &&
-            docker push docker.pkg.github.com/wfa-siyengar/terraform-gcp-wfa-kingdom/{}:latest' -- --define container_registry=docker.pkg.github.com --define image_name=push_duchy --define docker_build_args="--build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}"
+            docker push docker.pkg.github.com/wfa-siyengar/terraform-gcp-wfa-kingdom/{}:latest' --platforms=//build/platforms:ubuntu_20_04_rbe -- --define container_registry=docker.pkg.github.com --define image_name=push_duchy --define docker_build_args="--build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}"
       # Login to GCR
      # - name: Login to GCR
       #  run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
