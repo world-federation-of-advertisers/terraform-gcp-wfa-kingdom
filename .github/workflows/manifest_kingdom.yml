@@ -12,38 +12,47 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-#name: 'K8s manifest Kingdom'
-#
-#on:
-#  push:
-#    branches: [ "main" ]
-#  pull_request:
-#
-#jobs:
-#  deploy:
-#    runs-on: ubuntu-20.04
-#    steps:
-#      - uses: actions/checkout@v2
-#
-#      # Authenticate with GCP using a service account key
-#      - name: 'Setting up GCP account Connection'
-#        uses: 'google-github-actions/auth@v1'
-#        with:
-#          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-#
-#      # Build the K8s manifest using Bazel
-#      - name: Setup Bazel
-#        uses: bazelbuild/setup-bazel@v1.1.0
-#
-#      - name: Build K8s manifest
-#        run: |
-#          cd src/main/k8s/dev
-#          bazel build :kingdom_gke \
-#            --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
-#            --define image_tag=$GITHUB_SHA
-#
-#      # Deploy the K8s manifest to the cluster
-#      - name: Deploy K8s manifest
-#        run: |
-#          kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
-#
+name: 'K8s manifest Kingdom'
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  deploy:
+    runs-on: ubuntu-20.04
+    steps:
+      - uses: actions/checkout@v2
+
+      # Authenticate with GCP using a service account key
+      - name: 'Setting up GCP account Connection'
+        uses: 'google-github-actions/auth@v1'
+        with:
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
+
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement    
+
+      # Build the K8s manifest using Bazel
+      #- name: Setup Bazel
+      #  uses: bazelbuild/setup-bazel@v1.1.0
+
+        # Create k8s manifest
+      - name: Build K8s manifest
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel build //src/main/k8s/dev:kingdom_gke \
+          --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
+          --define image_tag=build-0001
+
+      # Deploy the K8s manifest to the cluster
+      #- name: Deploy K8s manifest
+      #  run: |
+      #    kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
