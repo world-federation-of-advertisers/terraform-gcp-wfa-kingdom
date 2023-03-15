@@ -31,22 +31,16 @@ jobs:
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
-      # Configure Docker to use the gcloud command-line tool as a credential
-      # helper for authentication
-      - run: |
-          gcloud --quiet auth configure-docker
-
       - name: Clone repositories
         run: |
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-
-      - name: change working directory
-        run: cd cross-media-measurement
+          cd cross-media-measurement
 
       # Create k8s manifest
       - name: Build K8s manifest
+        working-directory: /tmp/cross-media-measurement
         run: |
           mkdir -p src/main/kube
           cd src/main/kube

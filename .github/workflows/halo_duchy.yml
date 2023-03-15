@@ -15,14 +15,10 @@
 name: 'Halo IAC'
 
 on:
-  push:
-    branches: [ "feature/halo-duchy-release", "main" ]
-  pull_request:
-
-  #workflow_run:
-  #  workflows: [ "Terraform Duchy" ]
-  #  types:
-  #    - completed
+  workflow_run:
+    workflows: [ "Terraform Duchy" ]
+    types:
+      - completed
 
 
 env:
