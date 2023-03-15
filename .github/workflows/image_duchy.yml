@@ -55,7 +55,7 @@ jobs:
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd cross-media-measurement        
+          cd cross-media-measurement   
 
       # Build the image
       - name: Build Bazel image
