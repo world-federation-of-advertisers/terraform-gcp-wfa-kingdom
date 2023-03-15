@@ -49,9 +49,8 @@ jobs:
           --define image_tag=build-0001
 
       # Deploy the Docker image to the GKE cluster
-      - name: Deploy
-        run: |-
-          bazel run //src/main/k8s/dev:worker1_duchy_gke.apply \
-          --define duchy_cert_id=SVVse4xWHL0 \
-          --define duchy_storage_bucket=worker1-duchy \
-          --define image_tag=build-0001
+ #     - name: Deploy
+  #      run: |-
+   #      --define duchy_cert_id=SVVse4xWHL0 \
+    #      --define duchy_storage_bucket=worker1-duchy \
+     #     --define image_tag=build-0001
