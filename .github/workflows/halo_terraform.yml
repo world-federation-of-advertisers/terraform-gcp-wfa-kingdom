@@ -76,7 +76,7 @@ jobs:
 
       # Creates a plan
       - name: Terraform Plan
-        run: terraform plan '-out=${{env.ENV}}_tfplan' -var env=${{env.ENV}} -var project=${{tenv.PROJECT}} -var service_account=${{env.SERVICE_ACCOUNT}}
+        run: terraform plan '-out=${{env.ENV}}_tfplan' -var env=${{env.ENV}} -var project=${{env.PROJECT}} -var service_account=${{env.SERVICE_ACCOUNT}}
         working-directory: ${{env.ROOT_PATH}}
 
       # Applies the above created plan
