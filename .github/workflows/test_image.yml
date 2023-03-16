@@ -50,7 +50,7 @@ jobs:
           cd cross-media-measurement   
 
       - name: Bazel build and test
-        working-directory: /tmp/cross-media-measurement
-        uses: world-federation-of-advertisers/cross-media-measurement/actions/bazel-build-test@v1
+        working-directory: /tmp/cross-media-measurement/build
+        uses: cross-media-measurement/build/bazel-build-test@v1
         with:
           workspace-path: .
