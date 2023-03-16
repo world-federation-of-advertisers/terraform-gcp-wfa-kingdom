@@ -14,7 +14,10 @@
 
 name: Build and Push image in GHCR
 
-on: push
+on:
+  push:
+    branches:
+      - main
 
 env:
   REGISTRY: ghcr.io
