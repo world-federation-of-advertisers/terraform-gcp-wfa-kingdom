@@ -7,4 +7,4 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Print Repository Owner
-        run: echo $TEST_REPOSITORY_OWNER
+        run: echo '${{ vars.TEST_REPOSITORY_OWNER }}'
