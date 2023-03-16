@@ -1,0 +1,10 @@
+name: My Workflow
+on:
+  push:
+    branches: [ "terraform-duchy" ]
+jobs:
+  my-job:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Print Repository Owner
+        run: echo $TEST_REPOSITORY_OWNER
