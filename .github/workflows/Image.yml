@@ -12,7 +12,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: Build and Push image in GHCR
+name: "Build and Push image in GHCR"
 
 on:
   push:
@@ -57,7 +57,7 @@ steps:
         -- //src/main/docker:<DOCKER_IMAGE_NAME> --password=${{ secrets.GHCR_TOKEN }}
 
     env:
-      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }
+      GHCR_TOKEN: ${{ secrets.GHCR_TOKEN }}
 
 
 
