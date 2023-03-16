@@ -12,43 +12,32 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: 'Terraform Kingdom'
+name: Build and Push image in GHCR
 
-on:
-  push:
-    branches: [ "main" ]
-  pull_request:
+on: push
 
-permissions:
-  contents: 'read'
-  id-token: 'write'
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
 
 jobs:
-  terraform:
-    name: 'Kingdom image build and push'
+  build-and-push-image:
     runs-on: ubuntu-22.04
     environment: production
+    permissions:
+      contents: read
+      packages: write
 
-    # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
-    defaults:
-      run:
-        shell: bash
+steps:
+  - name: Checkout repository
+    uses: actions/checkout@v3
 
-    steps:
-      # Checkout the repository to the GitHub Actions runner
-      - name: Checkout
-        uses: actions/checkout@v3
-
-      # Authenticate with workload Identity federation.
-      - id: 'auth'
-        name: 'Authenticate to Google Cloud'
-        uses: 'google-github-actions/auth@v1'
-        with:
-          workload_identity_provider: 'projects/36966063264/locations/global/workloadIdentityPools/githubactions/providers/my-provider'
-          service_account: 'github-actions@halo-cmm-sandbox.iam.gserviceaccount.com'
-
-      - name: 'Set up Cloud SDK'
-        uses: 'google-github-actions/setup-gcloud@v1'
+  - name: Log in to the Container registry
+    uses: docker/login-action@f054a8b539a109f9f41c372932f1ae047eff08c9
+    with:
+      registry: ${{ env.REGISTRY }}
+      username: ${{ github.actor }}
+      password: ${{ secrets.GHCR_TOKEN }}
 
     #  # Build the image
     #  - name: Build Bazel image
