@@ -17,6 +17,7 @@ name: 'Halo IAC'
 on:
   push:
     branches: [ "main" ]
+  pull_request:
 
 env:
   ROOT_PATH: '${{ github.workspace }}/src/main/terraform'
