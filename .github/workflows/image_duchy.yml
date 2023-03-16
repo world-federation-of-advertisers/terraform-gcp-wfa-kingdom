@@ -65,14 +65,14 @@ jobs:
           cd src/main/docker
           cd ../..
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-          xargs bazel build -c opt --define container_registry=docker.pkg.github.com/wfa-siyengar/terraform-gcp-wfa-kingdom/{}:latest \
-          --define image_repo_prefix=terraform-gcp-wfa-kingdom --platforms=//build/platforms:ubuntu_20_04_rbe --define image_name=push_duchy --define docker_build_args="--build-arg GITHUB_TOKEN=${{ secrets.GITHUB_TOKEN }}"
+          xargs bazel build -c opt --define container_registry=gcr.io \
+          --define image_repo_prefix=halo-cmm-sandbox  --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
           
 
       # Login to GCR
-     # - name: Login to GCR
-      #  run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
+      - name: Login to GCR
+        run: gcloud auth print-access-token | docker login -u oauth2accesstoken --password-stdin https://gcr.io
 
       # Push the image
-      #- name: Push Bazel image
-       # run: bazel run //bazel:push_bazel_image --define=wfa-siyengar --define=image_tag=build-0001
+      - name: Push Bazel image
+        run: bazel run //bazel:push_bazel_image --define=github_repo_owner=$TEST_REPOSITORY_OWNER --define=image_tag=build-0001
