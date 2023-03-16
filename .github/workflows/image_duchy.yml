@@ -75,4 +75,5 @@ jobs:
 
       # Push the image
       - name: Push Bazel image
+        working-directory: /tmp/cross-media-measurement
         run: bazel run //bazel:push_bazel_image --define=github_repo_owner=$TEST_REPOSITORY_OWNER --define=image_tag=build-0001
