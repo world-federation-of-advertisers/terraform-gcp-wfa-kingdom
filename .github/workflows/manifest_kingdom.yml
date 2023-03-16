@@ -30,9 +30,11 @@ jobs:
         with:
           credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
+      # Setup the SDK
       - name: Set up Cloud SDK
         uses: google-github-actions/setup-gcloud@v1
 
+      # clone the cmm repo
       - name: Clone repositories
         run: |
           cd /tmp
@@ -40,14 +42,25 @@ jobs:
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement    
 
-      # Build the K8s manifest using Bazel
-      #- name: Setup Bazel
-      #  uses: bazelbuild/setup-bazel@v1.1.0
-
-        # Create k8s manifest
+      # Create k8s manifest
       - name: Build K8s manifest
         working-directory: /tmp/cross-media-measurement
         run: |
           bazel build //src/main/k8s/dev:kingdom_gke \
           --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
           --define image_tag=build-0001
+
+      # Deploy the manifest
+      - name: Deploy K8s manifest
+        run: |
+          kubectl apply -f bazel-bin/src/main/k8s/dev/kingdom_gke.yaml
+
+      # To check all the kingdom components has been deployed
+      - name: Get deployments
+        run: |
+          kubectl get deployments
+
+      # To check the services
+      - name: Get services
+        run: |
+          kubectl get services
