@@ -54,7 +54,7 @@ jobs:
 
       - name: Build Docker image
         run: |
-          cd src/main/docker
+          cd ${{ github.workspace }}/src/main/docker
           mkdir -p src/main/docker
           cd ../..
           bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
