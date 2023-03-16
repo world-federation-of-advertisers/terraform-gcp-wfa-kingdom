@@ -42,4 +42,4 @@ jobs:
         with:
           registry: ghcr.io
           username: wfa-hkawalkar
-          password: ${{ secrets.GIT_SECRETS }
+          password: ${{ secrets.GIT_SECRETS }}
