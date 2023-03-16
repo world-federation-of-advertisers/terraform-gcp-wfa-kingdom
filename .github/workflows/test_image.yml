@@ -41,16 +41,8 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v3
 
-      # Clone the repositories
-      - name: Clone repositories
-        run: |
-          cd /tmp
-          echo "Cloning the cross-media-measurement repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd cross-media-measurement 
-
       - name: Bazel build and test
         working-directory: /tmp/cross-media-measurement
         uses: world-federation-of-advertisers/actions/bazel-build-test@v1
         with:
-          workspace-path: //src/main/docker:all
+          workspace-path: .
