@@ -53,8 +53,8 @@ jobs:
         name: 'Authenticate to Google Cloud'
         uses: 'google-github-actions/auth@v1'
         with:
-          workload_identity_provider: 'projects/36966063264/locations/global/workloadIdentityPools/githubactions/providers/my-provider'
-          service_account: 'github-actions@halo-cmm-sandbox.iam.gserviceaccount.com'
+          workload_identity_provider: ${{ secrets.WFI_PROVIDER }}
+          service_account: ${{ secrets.WFI_SA }}
 
       # Setup the SDK
       - name: Set up Cloud SDK
