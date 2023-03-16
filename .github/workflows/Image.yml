@@ -44,12 +44,24 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_TOKEN }}
 
+      # Clone the repositories
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
+
       - name: Build Docker image
         run: |
+          cd src/main/docker
+          mkdir -p src/main/docker
+          cd ../..
           bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
             xargs bazel build -c opt --define container_registry=ghcr.io \
             --define image_repo_prefix=${{ env.GHCR_USERNAME }}/${{ env.IMAGE_NAME }} \
             --define image_tag=${{ env.IMAGE_TAG }}
+
       - name: Push Docker image
         run: |
           bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
