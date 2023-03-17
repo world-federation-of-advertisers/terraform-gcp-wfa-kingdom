@@ -28,15 +28,6 @@ jobs:
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
 
-      - name: Set up Cloud SDK
-        uses: google-github-actions/setup-gcloud@v1
-
-      - name: Clone repositories
-        run: |
-          cd /tmp
-          echo "Cloning the cross-media-measurement repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd cross-media-measurement
 
       # Create k8s manifest
       - name: Build K8s manifest
@@ -49,8 +40,8 @@ jobs:
           --define image_tag=build-0001
 
       # Deploy the Docker image to the GKE cluster
- #     - name: Deploy
-  #      run: |-
-   #      --define duchy_cert_id=SVVse4xWHL0 \
-    #      --define duchy_storage_bucket=worker1-duchy \
-     #     --define image_tag=build-0001
+      - name: Deploy
+        run: |-
+         --define duchy_cert_id=SVVse4xWHL0 \
+          --define duchy_storage_bucket=duchy \
+          --define image_tag=build-0001
