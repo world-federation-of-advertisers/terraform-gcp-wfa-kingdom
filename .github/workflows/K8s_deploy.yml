@@ -13,6 +13,10 @@ on:
   push:
     branches: [ "terraform-duchy" ]
 
+env:
+  ENV: '${{ vars.ENV }}'
+  PROJECT: '${{ vars.PROJECT }}'
+
 jobs:
   setup-build-publish-deploy:
     name: Deploy
@@ -27,6 +31,7 @@ jobs:
         uses: google-github-actions/auth@v1
         with:
           credentials_json: ${{ secrets.GCP_CREDENTIALS }}
+
 
 
       # Create k8s manifest
