@@ -49,6 +49,11 @@ jobs:
           xargs bazel build -c opt --define container_registry=ghcr.io \
           --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
 
+      - name: export docker built
+        run: |
+          export DOCKER_BUILDKIT=0
+          export COMPOSE_DOCKER_CLI_BUILD=0
+
       - name: Login to GitHub Packages
         uses: docker/login-action@v1
         with:
