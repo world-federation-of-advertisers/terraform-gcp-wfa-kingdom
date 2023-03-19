@@ -35,7 +35,7 @@ jobs:
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs bazel build -c opt --define container_registry=ghcr.io \
           --define image_repo_prefix=halo-cmm-sandbox --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
-          --push --tag ${{ env.IMAGE_NAME }} .
+          --tag ${{ env.IMAGE_NAME }} .
 
       - name: Login to GitHub Packages
         uses: docker/login-action@v1
