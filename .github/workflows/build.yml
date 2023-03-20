@@ -63,6 +63,7 @@ jobs:
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
         with:
-          context: duchy
+        #  context: .
+          dockerfile: Dockerfile
           push: true
           tags: ghcr.io/wfa-hkawalkar/cross-media-measurement/halo-cmm-sandbox/push_duchy:build-0001
