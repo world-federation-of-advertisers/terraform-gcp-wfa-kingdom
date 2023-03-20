@@ -75,8 +75,8 @@ jobs:
         #  tags: ghcr.io/wfa-hkawalkar/cross-media-measurement/halo-cmm-sandbox/push_duchy:build-0001
 
       - name: Push Image to GitHub repo
-        run: |
         working-directory: /tmp/cross-media-measurement
+        run: |
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
             xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
             --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --define image_tag=build-0001
