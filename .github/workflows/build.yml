@@ -54,6 +54,7 @@ jobs:
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
+
       - name: export docker built
         run: |
           export DOCKER_BUILDKIT=0 
@@ -79,4 +80,4 @@ jobs:
         run: |
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
             xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
-            --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --define image_tag=build-0001
+            --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
