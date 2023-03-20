@@ -62,8 +62,14 @@ jobs:
 
       - name: Build and push Docker image
         uses: docker/build-push-action@v2
-        with:
+       # with:
         #  context: .
-          dockerfile: Dockerfile
-          push: true
-          tags: ghcr.io/wfa-hkawalkar/cross-media-measurement/halo-cmm-sandbox/push_duchy:build-0001
+       #   dockerfile: Dockerfile
+       #   push: true
+        #  tags: ghcr.io/wfa-hkawalkar/cross-media-measurement/halo-cmm-sandbox/push_duchy:build-0001
+
+      - name: Push Image to GitHub repo
+        run: |
+          bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+            xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
+            --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --define image_tag=build-0001
