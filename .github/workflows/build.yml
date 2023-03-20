@@ -41,6 +41,12 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GIT_SEC }}
 
+      - name: Extract metadata (tags, labels) for Docker
+        id: meta
+        uses: docker/metadata-action@v2
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+
       # Clone the repositories
       - name: Clone repositories
         run: |
