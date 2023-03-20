@@ -55,29 +55,40 @@ jobs:
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd cross-media-measurement
 
+      # Export Docker Build
       - name: export docker built
         run: |
           export DOCKER_BUILDKIT=0 
           export COMPOSE_DOCKER_CLI_BUILD=0
 
-      - name: Build and push Docker image
+      # Build Duchy Image
+      - name: Build Duchy image
         working-directory: /tmp/cross-media-measurement
         run: |
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs bazel build -c opt --define container_registry=ghcr.io \
           --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
 
-    #  - name: Build and push Docker image
-    #    uses: docker/build-push-action@v2
-       # with:
-        #  context: .
-       #   dockerfile: Dockerfile
-       #   push: true
-        #  tags: ghcr.io/wfa-hkawalkar/cross-media-measurement/halo-cmm-sandbox/push_duchy:build-0001
+      # Build Kingdom Image
+      - name: Build kingdom image
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
+          xargs bazel build -c opt --define container_registry=ghcr.io \
+          --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001    
 
+      # Push Duchy Image to GitHub Artifacts.
       - name: Push Image to GitHub repo
         working-directory: /tmp/cross-media-measurement
         run: |
           bazel query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+            xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
+            --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
+
+      # Push Kingdom Image to GitHub Artifacts.
+      - name: Push Image to GitHub repo
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
             xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
             --define image_repo_prefix=wfa-hkawalkar/cross-media-measurement --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=build-0001
