@@ -1,0 +1,30 @@
+name: Create Secrets
+
+on:
+  push:
+    branches: [ "terraform-duchy" ]
+
+jobs:
+  push_create_k8s_manifest:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      # Clone the repositories
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
+
+      # Create k8s manifest
+      - name: Build K8s manifestement
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel build //src/main/k8s/dev:worker1_duchy_gke \
+          --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
+          --define duchy_cert_id=SVVse4xWHL0 \
+          --define duchy_storage_bucket=worker1-duchy \
+          --define image_tag=build-0001
