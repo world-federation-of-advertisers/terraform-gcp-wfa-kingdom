@@ -25,6 +25,7 @@ jobs:
           curl -LO "https://dl.k8s.io/release/v1.26.0/bin/linux/amd64/kubectl.sha256"
           echo "$(cat kubectl.sha256)  kubectl" | sha256sum --check
           sudo install -o root -g root -m 0755 kubectl /usr/local/bin/kubectl
+
       # Create k8s manifest
       - name: Build K8s manifestement
         working-directory: /tmp/cross-media-measurement
@@ -34,3 +35,8 @@ jobs:
           --define duchy_cert_id=SVVse4xWHL0 \
           --define duchy_storage_bucket=worker1-duchy \
           --define image_tag=build-0001
+
+      - name: apply k8s manifest
+        run: |
+          kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml
+          
