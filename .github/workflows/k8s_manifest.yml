@@ -1,20 +1,20 @@
 name: Create Secrets
 
 on:
-  push:
-    branches: [ "terraform-duchy" ]
+ # push:
+  #  branches: [ "terraform-duchy" ]
 
-  # workflow_dispatch:
-   # inputs:
-    #  environment:
-     #   type: choice
-      #  description: 'Environment to run the flow for.'
-       # options:
-        #  - QA
-         # - NIGHTLY
-     # kubectl_apply:
-      #  required: false
-       # type: boolean
+   workflow_dispatch:
+    inputs:
+     environment:
+      type: choice
+      description: 'Environment to run the flow for.'
+      options:
+          - QA
+          - NIGHTLY
+      kubectl_apply:
+        required: false
+        type: boolean
 jobs:
   create_k8s_manifest:
     runs-on: ubuntu-20.04
