@@ -40,7 +40,7 @@ jobs:
         working-directory: /tmp/cross-media-measurement
         run: |
           bazelisk run //src/main/k8s/dev:worker1_duchy_gke \
-          --define k8s_duchy_secret_name=certs-and-configs-abcdedg \
+          --define k8s_duchy_secret_name=certs-and-configs \
           --define duchy_cert_id=SVVse4xWHL0 \
           --define duchy_storage_bucket=worker1-duchy \
           --define image_tag=$IMAGE_TAG
