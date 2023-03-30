@@ -1,0 +1,63 @@
+name: Create Secrets
+
+on:
+  push:
+    branches: [ "main" ]
+
+      # workflow_dispatch:
+      # inputs:
+      # environment:
+      # type: choice
+      #description: 'Environment to run the flow for.'
+      # options:
+      #    - QA
+      #   - NIGHTLY
+      # kubectl_apply:
+      #   required: false
+    #  type: boolean
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  create_k8s_manifest:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Export IMAGE_TAG
+        env:
+          DEFAULT_BRANCH: main
+        run: chmod +x ./.github/workflows/export-image-tag.sh && ./.github/workflows/export-image-tag.sh
+
+      - name: Login to GitHub Packages
+        uses: docker/login-action@v1
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GIT_SECRETS }}
+
+      # Clone the repositories
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd cross-media-measurement
+
+      # Create k8s manifest
+      - name: Build K8s manifest
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazel run //src/main/k8s/dev:duchy_gke.cue \
+          --define k8s_duchy_secret_name=certs-and-configs \
+          --define duchy_cert_id=SVVse4xWHL0 \
+          --define duchy_storage_bucket=terraform-state-halo-cmm \
+          --define container_registry=ghcr.io \
+          --define image_repo_prefix=world-federation-of-advertisers/packages --define image_tag=$IMAGE_TAG
+
+      - name: apply k8s manifest
+        if: inputs.kubectl_apply == true
+        run: |
+          kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml     
