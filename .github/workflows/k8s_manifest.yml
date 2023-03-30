@@ -32,7 +32,7 @@ jobs:
         with:
           registry: ${{ env.REGISTRY }}
           username: ${{ github.actor }}
-          password: ${{ secrets.GIT_SEC }}
+          password: ${{ secrets.GIT_SECRETS }}
 
       # Clone the repositories
       - name: Clone repositories
