@@ -29,7 +29,7 @@ jobs:
       - name: Export IMAGE_TAG
         env:
           DEFAULT_BRANCH: main
-        run:
+        run: |
           touch ./.github/workflows/export-image-tag.sh
           chmod +x ./.github/workflows/export-image-tag.sh && ./.github/workflows/export-image-tag.sh
 
