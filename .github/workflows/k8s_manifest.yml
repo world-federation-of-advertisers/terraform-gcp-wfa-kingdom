@@ -54,8 +54,8 @@ jobs:
           --define k8s_duchy_secret_name=certs-and-configs \
           --define duchy_cert_id=SVVse4xWHL0 \
           --define duchy_storage_bucket=terraform-state-halo-cmm \
-          --define container_registry=gcr.io \
-           --define image_repo_prefix=world-federation-of-advertisers/packages --define image_tag=$IMAGE_TAG
+          --define container_registry=ghcr.io \
+          --define image_repo_prefix=world-federation-of-advertisers/packages --define image_tag=$IMAGE_TAG
 
       - name: apply k8s manifest
         if: inputs.kubectl_apply == true
