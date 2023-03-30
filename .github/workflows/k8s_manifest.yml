@@ -57,3 +57,4 @@ jobs:
         if: inputs.kubectl_apply == true
         run: |
           kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml     
+
