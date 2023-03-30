@@ -50,10 +50,8 @@ jobs:
       - name: Build K8s manifest
         working-directory: /tmp/cross-media-measurement
         run: |
-          bazel run //src/main/k8s/dev:duchy_gke.cue \
-          --define k8s_duchy_secret_name=certs-and-configs \
-          --define duchy_cert_id=SVVse4xWHL0 \
-          --define duchy_storage_bucket=terraform-state-halo-cmm \
+          bazel build //src/main/k8s/dev:kingdom_gke \
+          --define=k8s_kingdom_secret_name=certs-and-configs-abcdedg \
           --define container_registry=ghcr.io \
           --define image_repo_prefix=world-federation-of-advertisers/packages --define image_tag=$IMAGE_TAG
 
