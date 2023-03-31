@@ -29,6 +29,12 @@ on:
         description: "Apply the manifest to the cluster"
         required: false
         type: boolean
+      service-account:
+        description: 'GCP Service Account email for federation'
+        required: true
+      workload-identity-provider:
+        description: 'GCP Workload Identity Provider'
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -39,6 +45,14 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v2
+
+      # Setup Gcloud identity federation
+      - name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+          service_account: ${{ inputs.service-account }}
+          token_format: 'access_token'
 
       # Clone the repositories
       - name: Clone repositories

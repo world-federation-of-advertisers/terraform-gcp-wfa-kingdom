@@ -15,8 +15,8 @@
 name: "Configure Kingdom"
 
 on:
-  push:
-    branches: ["terraform-duchy"]
+  workflow_call:
+  workflow_dispatch:
     inputs:
       image_tag:
         description: "Image tag needed for configuration"
@@ -51,6 +51,9 @@ jobs:
           workload_identity_provider: ${{ inputs.workload-identity-provider }}
           service_account: ${{ inputs.service-account }}
           token_format: 'access_token'
+      # Update KUBECONFIG
+      - name: Update KUBECONFIG
+        run: gcloud container clusters get-credentials dev-halo-duchy-gke-cluster --zone us-central1
 
       # TODO(wfa-hkawalkar): applying manifest failing.
       - name: Apply secrets
@@ -65,10 +68,6 @@ jobs:
           --define container_registry=ghcr.io \
           --define image_repo_prefix=${{ env.REPO_PREFIX }} \
           --define image_tag=${{ inputs.image_tag }}
-
-      # Update KUBECONFIG
-      - name: Update KUBECONFIG
-        run: gcloud container clusters get-credentials dev-halo-duchy-gke-cluster --zone us-central1
 
       # Apply manifest
       - name: apply k8s manifest
