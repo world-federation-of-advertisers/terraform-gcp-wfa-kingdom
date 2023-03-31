@@ -32,7 +32,7 @@ jobs:
       - name: Export IMAGE_TAG
         env:
           DEFAULT_BRANCH: main
-        run: sudo ./.github/workflows/export-image-tag.sh
+        run: chmod +x ./.github/workflows/export-image-tag.sh
 
       - name: Login to GitHub Packages
         uses: docker/login-action@v1
