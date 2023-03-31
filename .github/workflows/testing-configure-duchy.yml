@@ -55,7 +55,7 @@ jobs:
         run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
 
   job2:
-    create_k8s_manifest:
+    apply_manifest:
       runs-on: ubuntu-20.04
       steps:
       - name: Checkout code
@@ -84,4 +84,4 @@ jobs:
       # Apply manifest
       - name: apply k8s manifest
         if: inputs.kubectl_apply == true
-        run: kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml
+        run: kubectl apply -f bazel-bin/src/main/k8s/dev/${{ inputs.duchy_name }}_duchy_gke
