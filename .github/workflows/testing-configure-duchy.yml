@@ -29,48 +29,62 @@ on:
         description: "Apply the manifest to the cluster"
         required: false
         type: boolean
+      service-account:
+        description: 'GCP Service Account email for federation'
+        required: true
+      workload-identity-provider:
+        description: 'GCP Workload Identity Provider'
+        required: true
 
 env:
   REGISTRY: ghcr.io
   REPO_PREFIX: world-federation-of-advertisers/packages
 jobs:
-  job1:
-    apply-secrets:
-      runs-on: ubuntu-20.04
-      steps:
-        - name: Checkout code
-          uses: actions/checkout@v2
+  create_k8s_manifest:
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
 
-        # Clone the repositories
-        - name: Clone repositories
-          run: |
-            cd /tmp
-            echo "Cloning the cross-media-measurement repository"
-            git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-            cd /tmp/cross-media-measurement
+      # Setup Gcloud identity federation
+      - name: "Authenticate to Google Cloud"
+        uses: "google-github-actions/auth@v1"
+        with:
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+          service_account: ${{ inputs.service-account }}
+          token_format: 'access_token'
 
-        # TODO(wfa-hkawalkar): applying manifest failing.
-        - name: Apply secrets
-          working-directory: /tmp/cross-media-measurement
-          run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
+      # Update KUBECONFIG
+      - name: Update KUBECONFIG
+        run: gcloud container clusters get-credentials dev-halo-duchy-gke-cluster --zone us-central1
 
-  job2:
-    apply-secrets:
-      runs-on: ubuntu-20.04
-      steps:
-        # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
-        # Create k8s manifest
-        - name: Build K8s manifest
-          working-directory: /tmp/cross-media-measurement
-          run: |
-            bazelisk build //src/main/k8s/${{ inputs.duchy_name }}_duchy_gke \
-            --define k8s_duchy_secret_name=certs-and-configs \
-            --define duchy_cert_id=SVVse4xWHL0 \
-            --define duchy_storage_bucket=worker1-duchy \
-            --define container_registry=${{ env.REGISTRY }} \
-            --define image_repo_prefix=${{ env.REPO_PREFIX }} \
-            --define image_tag=${{ inputs.image_tag }}
-        # Apply manifest
-        - name: apply k8s manifest
-          if: inputs.kubectl_apply == true
-          run: kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml
+      # Clone the repositories
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd /tmp/cross-media-measurement
+
+      # TODO(wfa-hkawalkar): applying manifest failing.
+      - name: Apply secrets
+        working-directory: /tmp/cross-media-measurement
+        run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
+
+      # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
+      # Create k8s manifest
+      - name: Build K8s manifest
+        working-directory: /tmp/cross-media-measurement
+        run: |
+          bazelisk build //src/main/k8s/${{ inputs.duchy_name }}_duchy_gke \
+          --define k8s_duchy_secret_name=certs-and-configs \
+          --define duchy_cert_id=SVVse4xWHL0 \
+          --define duchy_storage_bucket=worker1-duchy \
+          --define container_registry=${{ env.REGISTRY }} \
+          --define image_repo_prefix=${{ env.REPO_PREFIX }} \
+          --define image_tag=${{ inputs.image_tag }}
+
+      # Apply manifest
+      - name: apply k8s manifest
+        if: inputs.kubectl_apply == true
+        run: kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml
