@@ -35,9 +35,9 @@ env:
   REPO_PREFIX: world-federation-of-advertisers/packages
 jobs:
   job1:
-  create_k8s_manifest:
-    runs-on: ubuntu-20.04
-    steps:
+    create_k8s_manifest:
+     runs-on: ubuntu-20.04
+     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
@@ -56,8 +56,8 @@ jobs:
 
   job2:
     apply_manifest:
-      runs-on: ubuntu-20.04
-      steps:
+     runs-on: ubuntu-20.04
+     steps:
       - name: Checkout code
         uses: actions/checkout@v2
 
