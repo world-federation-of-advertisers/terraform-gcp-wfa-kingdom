@@ -58,6 +58,15 @@ jobs:
     create_k8s_manifest:
       runs-on: ubuntu-20.04
       steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Clone repositories
+        run: |
+          cd /tmp
+          echo "Cloning the cross-media-measurement repository"
+          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
+          cd /tmp/cross-media-measurement
 
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
