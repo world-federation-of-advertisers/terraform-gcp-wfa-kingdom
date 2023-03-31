@@ -44,8 +44,7 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-        token_format: 'access_token'
-        credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
