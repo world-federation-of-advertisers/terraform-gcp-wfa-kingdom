@@ -34,6 +34,7 @@ env:
   REGISTRY: ghcr.io
   REPO_PREFIX: world-federation-of-advertisers/packages
 jobs:
+  job1:
   create_k8s_manifest:
     runs-on: ubuntu-20.04
     steps:
@@ -52,6 +53,11 @@ jobs:
       - name: Apply secrets
         working-directory: /tmp/cross-media-measurement
         run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
+
+  job2:
+    create_k8s_manifest:
+      runs-on: ubuntu-20.04
+      steps:
 
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
