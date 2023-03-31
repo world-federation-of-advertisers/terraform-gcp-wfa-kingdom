@@ -75,14 +75,14 @@ jobs:
       - name: Push Image to GitHub repo
         working-directory: /tmp/cross-media-measurement
         run: |
-          bazeliskisk query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
-            xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
+          bazelisk query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
+            xargs -n 1 bazelisk run -c opt --define container_registry=ghcr.io \
             --define image_repo_prefix=wfa-hkawalkar/terraform-gcp-wfa-kingdom --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=$IMAGE_TAG
 
       # Push Kingdom Image to GitHub Artifacts.
       - name: Push Image to GitHub repo
         working-directory: /tmp/cross-media-measurement
         run: |
-          bazeliskisk query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
-            xargs -n 1 bazel run -c opt --define container_registry=ghcr.io \
+          bazelisk query 'filter("push_kingdom", kind("container_push", //src/main/docker:all))' |
+            xargs -n 1 bazelisk run -c opt --define container_registry=ghcr.io \
             --define image_repo_prefix=wfa-hkawalkar/terraform-gcp-wfa-kingdom --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=$IMAGE_TAG
