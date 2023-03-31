@@ -61,7 +61,7 @@ jobs:
         run: |
           bazelisk query 'filter("push_duchy", kind("container_push", //src/main/docker:all))' |
           xargs bazelisk build -c opt --define container_registry=ghcr.io \
-          --define image_repo_prefix=world-wfa-hkawalkar/terraform-gcp-wfa-kingdom--platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=$IMAGE_TAG
+          --define image_repo_prefix=world-wfa-hkawalkar/terraform-gcp-wfa-kingdom --platforms=//build/platforms:ubuntu_20_04_rbe --define image_tag=$IMAGE_TAG
 
       # Build Kingdom Image
       - name: Build kingdom image
