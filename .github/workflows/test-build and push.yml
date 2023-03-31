@@ -16,7 +16,7 @@ name: Push Docker Image to Github Artifacts
 
 on:
   push:
-    branches: [ "terraform-duchy" ]
+    branches: [ "main" ]
 
 env:
   REGISTRY: ghcr.io
