@@ -29,6 +29,12 @@ on:
         description: "Apply the manifest to the cluster"
         required: false
         type: boolean
+      service-account:
+        description: 'GCP Service Account email for federation'
+        required: true
+      workload-identity-provider:
+        description: 'GCP Workload Identity Provider'
+        required: true
 
 env:
   REGISTRY: ghcr.io
@@ -44,11 +50,9 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      # Update KUBECONFIG
-      - name: Update KUBECONFIG
-        run: gcloud container clusters get-credentials dev-halo-duchy-gke-cluster --zone us-central1
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+          service_account: ${{ inputs.service-account }}
+          token_format: 'access_token'
 
       # Clone the repositories
       - name: Clone repositories
@@ -56,7 +60,7 @@ jobs:
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd /tmp/cross-media-measurement 
+          cd /tmp/cross-media-measurement
 
       # TODO(wfa-hkawalkar): applying manifest failing.
       - name: Apply secrets
