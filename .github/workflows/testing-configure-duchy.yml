@@ -43,47 +43,18 @@ jobs:
   create_k8s_manifest:
     runs-on: ubuntu-20.04
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v2
+      # Checkout the repository to the GitHub Actions runner
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      # Install gcloud, `setup-gcloud` automatically picks up authentication from `auth`.
+      - name: Set up Cloud SDK
+        uses: google-github-actions/setup-gcloud@v1
 
       # Setup Gcloud identity federation
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
-
-      # Clone the repositories
-      - name: Clone repositories
-        run: |
-          cd /tmp
-          echo "Cloning the cross-media-measurement repository"
-          git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd /tmp/cross-media-measurement
-
-      - name: Echo hash
-        working-directory: /tmp/cross-media-measurement
-        run: env
-
-      # TODO(wfa-hkawalkar): applying manifest failing.
-      - name: Apply secrets
-        working-directory: /tmp/cross-media-measurement
-        run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
-
-
-      # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
-      # Create k8s manifest
-      - name: Build K8s manifest
-        working-directory: /tmp/cross-media-measurement
-        run: |
-          bazelisk build //src/main/k8s/${{ inputs.duchy_name }}_duchy_gke \
-          --define k8s_duchy_secret_name=certs-and-configs \
-          --define duchy_cert_id=SVVse4xWHL0 \
-          --define duchy_storage_bucket=worker1-duchy \
-          --define container_registry=${{ env.REGISTRY }} \
-          --define image_repo_prefix=${{ env.REPO_PREFIX }} \
-          --define image_tag=${{ inputs.image_tag }}
-
-      # Apply manifest
-      - name: apply k8s manifest
-        if: inputs.kubectl_apply == true
-        run: kubectl apply -f bazel-bin/src/main/k8s/dev/worker1_duchy_gke.yaml
+          workload_identity_provider: ${{ secrets.WFI_PROVIDER }}
+          service_account: ${{ secrets.WFI_SA }}
+          token_format: 'access_token'
