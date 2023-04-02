@@ -50,9 +50,7 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          workload_identity_provider: ${{ inputs.workload-identity-provider }}
-          service_account: ${{ inputs.service-account }}
-          token_format: 'access_token'
+          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
 
       # Clone the repositories
       - name: Clone repositories
