@@ -12,29 +12,35 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-name: "Configure Duchy"
+name: Configure Duchy
 
 on:
-#workflow_call:
- workflow_dispatch:
-  inputs:
-    image_tag:
-      description: "Image tag needed for configuration"
-      type: string
-      required: true
-    duchy_name:
-      description: "The name of the Duchy to build"
-      required: true
-    kubectl_apply:
-      description: "Apply the manifest to the cluster"
-      required: false
-      type: boolean
+  #workflow_call:
+  workflow_dispatch:
+    inputs:
+      image_tag:
+        description: "Image tag needed for configuration"
+        type: string
+        required: true
+      duchy_name:
+        description: "The name of the Duchy to build"
+        required: true
+      kubectl_apply:
+        description: "Apply the manifest to the cluster"
+        required: false
+        type: boolean
+      service-account:
+        description: 'GCP Service Account email for federation'
+        required: true
+      workload-identity-provider:
+        description: 'GCP Workload Identity Provider'
+        required: true
 
 env:
   REGISTRY: ghcr.io
   REPO_PREFIX: world-federation-of-advertisers/packages
 jobs:
-  configure-duchy:
+  create_k8s_manifest:
     runs-on: ubuntu-20.04
     steps:
       - name: Checkout code
@@ -44,7 +50,9 @@ jobs:
       - name: "Authenticate to Google Cloud"
         uses: "google-github-actions/auth@v1"
         with:
-          credentials_json: '${{ secrets.GCP_CREDENTIALS }}'
+          workload_identity_provider: ${{ inputs.workload-identity-provider }}
+          service_account: ${{ inputs.service-account }}
+          token_format: 'access_token'
 
       # Clone the repositories
       - name: Clone repositories
@@ -52,7 +60,17 @@ jobs:
           cd /tmp
           echo "Cloning the cross-media-measurement repository"
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
-          cd /tmp/cross-media-measurement          
+          cd /tmp/cross-media-measurement
+
+      - name: Echo hash
+        working-directory: /tmp/cross-media-measurement
+        run: env
+
+      # TODO(wfa-hkawalkar): applying manifest failing.
+      - name: Apply secrets
+        working-directory: /tmp/cross-media-measurement
+        run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
+
 
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
@@ -66,15 +84,6 @@ jobs:
           --define container_registry=${{ env.REGISTRY }} \
           --define image_repo_prefix=${{ env.REPO_PREFIX }} \
           --define image_tag=${{ inputs.image_tag }}
-
-      # Update KUBECONFIG
-      - name: Update KUBECONFIG
-        run: gcloud container clusters get-credentials dev-halo-duchy-gke-cluster --zone us-central1
-
-      # TODO(wfa-hkawalkar): applying manifest failing.
-      - name: Apply secrets
-        working-directory: /tmp/cross-media-measurement
-        run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
 
       # Apply manifest
       - name: apply k8s manifest
