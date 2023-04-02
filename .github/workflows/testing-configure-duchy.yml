@@ -67,6 +67,10 @@ jobs:
         working-directory: /tmp/cross-media-measurement
         run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
 
+      - name: Echo hash
+        working-directory: /tmp/cross-media-measurement
+        run: env
+
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
       - name: Build K8s manifest
