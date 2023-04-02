@@ -62,14 +62,15 @@ jobs:
           git clone -b main https://github.com/world-federation-of-advertisers/cross-media-measurement.git
           cd /tmp/cross-media-measurement
 
+      - name: Echo hash
+        working-directory: /tmp/cross-media-measurement
+        run: env
+
       # TODO(wfa-hkawalkar): applying manifest failing.
       - name: Apply secrets
         working-directory: /tmp/cross-media-measurement
         run: bazelisk run //src/main/k8s/testing/secretfiles:apply_kustomization
 
-      - name: Echo hash
-        working-directory: /tmp/cross-media-measurement
-        run: env
 
       # TODO(wfa-hkawalkar): import secrets to manifest from k8s secretsfile.
       # Create k8s manifest
