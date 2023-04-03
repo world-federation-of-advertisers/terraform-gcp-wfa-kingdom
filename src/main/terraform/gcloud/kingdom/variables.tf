@@ -74,6 +74,6 @@ variable "component" {
 variable "service_account" {
   type = string
   # TODO: Our approach is to put this in github secrets and fetch it during runtime and feed it here.
-  default = "serviceAccount:service-1049178966878@compute-system.iam.gserviceaccount.com"
+  default = "36966063264-compute@developer.gserviceaccount.com"
   description = "The Service account to be used to create these resources"
 }
