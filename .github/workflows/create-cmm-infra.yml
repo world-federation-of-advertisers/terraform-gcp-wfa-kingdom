@@ -30,6 +30,7 @@ on:
           - qa
           - nightly
       terraform_apply:
+        default: true
         required: false
         type: boolean
 
