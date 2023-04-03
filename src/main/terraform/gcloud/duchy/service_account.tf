@@ -19,10 +19,6 @@
 # Grant Cloud Spanner database access to the service account for the considered Project ID
 # Bind service-account <------> project_id <----------> spanner_db
 
-data "google_service_account" "spanner_service_account"{
-  account_id = "spanner-access-sa"
-}
-
 
 # Create GKE service account for workload identity
 # Bind IAM role to GKE service account
