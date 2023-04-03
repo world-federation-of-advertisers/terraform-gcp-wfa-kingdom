@@ -36,6 +36,7 @@ module "worker-1" {
   env = var.env
   project = var.project
   component = "worker1"
+  depends_on = [ module.kingdom ]
 }
 
 module "worker-2" {
@@ -43,6 +44,7 @@ module "worker-2" {
   env = var.env
   project = var.project
   component = "worker2"
+  depends_on = [ module.kingdom ]
 }
 
 module "worker-3" {
@@ -50,4 +52,5 @@ module "worker-3" {
   env = var.env
   project = var.project
   component = "worker3"
+  depends_on = [ module.kingdom ]
 }
