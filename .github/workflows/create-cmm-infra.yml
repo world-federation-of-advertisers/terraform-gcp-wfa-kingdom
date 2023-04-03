@@ -29,6 +29,11 @@ on:
         options:
           - qa
           - nightly
+      project:
+        type: string
+        description: 'Project Name Infra is created for:'
+        default: "halo-cmm-sandbox"
+
       terraform_apply:
         default: true
         required: false
@@ -84,8 +89,7 @@ jobs:
         run: | 
           terraform plan '-out=${{ inputs.environment }}_tfplan' \
             -var env=${{ inputs.environment }} \
-            -var project=${{ inputs.project }} \
-            -var region=us-central1
+            -var project=${{ inputs.project }}
 
       # Apply the plan Generated.
       - name: Terraform Apply
