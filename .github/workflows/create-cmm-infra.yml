@@ -83,7 +83,8 @@ jobs:
         run: | 
           terraform plan '-out=${{ inputs.environment }}_tfplan' \
             -var env=${{ inputs.environment }} \
-            -var project=${{ inputs.project }}
+            -var project=${{ inputs.project }} \
+            -var region=us-central1
 
       # Apply the plan Generated.
       - name: Terraform Apply
