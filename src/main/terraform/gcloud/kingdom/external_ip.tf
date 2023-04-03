@@ -17,10 +17,12 @@
 
 resource "google_compute_address" "v2alpha_public_api_server_ip" {
   name = "v2alpha-public-api-server-ip"
-  region = "us-central1"
+  region = local.zone
+  project = var.project
 }
 
 resource "google_compute_address" "system_api_server_ip" {
   name = "system-api-server-ip"
-  region = "us-central1"
+  region = local.zone
+  project = var.project
 }
