@@ -16,23 +16,23 @@ locals {
   env = var.env
   project = var.project
   component = var.component
-  zone = "us-east1"
+  zone = "us-central1"
 
   # e.g. Prefix will look like dev-halo-kingdom
   prefix = "${local.env}-${local.component}"
 
   spanner_db = {
-    deletion_protection = false #TODO
+    deletion_protection = true
     version_retention_period = "3d"
     num_nodes    = 1
   }
 
   kingdom = {
     # configured as per the document.
-    cluster_node_count = 1
-    machine_type = "e2-micro" #TODO change to e2-highcpu-2
-    min_node_count = 1 # TODO 3
-    max_node_count = 1 # TODO 6
+    cluster_node_count = 3
+    machine_type = "e2-highcpu-2"
+    min_node_count = 3
+    max_node_count = 6
   }
 
   kms = {

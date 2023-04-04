@@ -22,7 +22,7 @@ locals {
   prefix = "${local.env}-${local.component}"
 
   spanner = {
-    deletion_protection      = false #TODO
+    deletion_protection      = true
     version_retention_period = "3d"
     num_nodes                = 1
   }
@@ -37,7 +37,7 @@ locals {
   }
 
   spanner_db = {
-    deletion_protection      = false #TODO
+    deletion_protection      = true
     version_retention_period = "3d"
     num_nodes                = 1
   }
