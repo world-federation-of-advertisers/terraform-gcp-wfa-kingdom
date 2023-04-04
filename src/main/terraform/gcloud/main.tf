@@ -24,9 +24,3 @@ terraform {
   }
 }
 
-module "kingdom" {
-  source = "./kingdom"
-  env = var.env
-  project = var.project
-  service_account = var.service_account
-}
