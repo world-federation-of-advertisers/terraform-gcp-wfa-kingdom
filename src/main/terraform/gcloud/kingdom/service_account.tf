@@ -27,13 +27,13 @@ resource "google_project_iam_member" "spanner_access" {
   role    = "roles/spanner.databaseUser"
   member  = "serviceAccount:${google_service_account.spanner_service_account.email}"
 }
-/*resource "google_spanner_database_iam_binding" "database_iam_binding" {
+resource "google_spanner_database_iam_binding" "database_iam_binding" {
   project    = local.project
   instance   = google_spanner_instance.halo_spanner_db.name
   database   = google_spanner_database.database.name
   role       = "roles/spanner.databaseUser"
   members    = [ "serviceAccount:${google_service_account.spanner_service_account.email}" ]
-}*/
+}
 
 
 # Create GKE service account for workload identity
