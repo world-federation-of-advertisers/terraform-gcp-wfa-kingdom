@@ -36,7 +36,7 @@ locals {
     max_node_count = 1
     auto_scaling = true
     database_encryption_state = "DECRYPTED" # state - (Required) ENCRYPTED or DECRYPTED
-    encryption_key = "projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"
+    encryption_key = "" #"projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"
   }
   autoscaling_resource_limits = local.kingdom.auto_scaling ? concat([{
     resource_type = "cpu"
