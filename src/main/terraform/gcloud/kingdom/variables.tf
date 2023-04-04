@@ -30,7 +30,7 @@ locals {
   kingdom = {
     # configured as per the document.
     name = "${local.prefix}-gke-cluster"
-    cluster_node_count = 3
+    cluster_node_count = 2
     machine_type = "e2-highcpu-2" # use e2-highcpu-2
     min_node_count = 3
     max_node_count = 6
