@@ -20,7 +20,6 @@ resource "google_container_cluster" "primary" {
   # the name will look like dev-halo-duchy-gke-cluster
   name     = "${local.prefix}-gke-cluster"
   location = "us-central1-a"
-  region = "us-central1"
   initial_node_count = local.kingdom.cluster_node_count
   #TODO: enable the code block below
 /*  database_encryption {
