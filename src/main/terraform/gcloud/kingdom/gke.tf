@@ -25,7 +25,11 @@ resource "google_container_cluster" "primary" {
     key_name = local.kingdom.encryption_key
     state = local.kingdom.database_encryption_state
   }
-
+  addons_config {
+    gce_persistent_disk_csi_driver_config {
+      enabled = false
+    }
+  }
   cluster_autoscaling {
     enabled = local.kingdom.auto_scaling
     dynamic "auto_provisioning_defaults" {
