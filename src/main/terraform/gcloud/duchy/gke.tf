@@ -21,7 +21,7 @@ resource "google_container_cluster" "worker" {
   # The name will look like dev-halo-duchy-worker
   name     = "${local.prefix}-worker"
 
-  location = local.zone
+  location = "us-central1-a" # TODO(wfa-dharmalingam): change it to local.zone
   initial_node_count = local.duchy.cluster_node_count
   database_encryption {
     key_name = "projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"

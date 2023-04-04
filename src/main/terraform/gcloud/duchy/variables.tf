@@ -29,10 +29,10 @@ locals {
 
   duchy = {
     # configured as per the document.
-    cluster_node_count = 2
+    cluster_node_count = 2 # TODO(wfa-dharmalingam): change it 3, once the quota increased
     machine_type       = "e2-standard-2"
-    min_node_count     = 2
-    max_node_count     = 4
+    machine_type = "e2-highcpu-2"
+    min_node_count = 2 # TODO(wfa-dharmalingam): change it 3, once the quota increased
     auto_scaling = true
   }
 
