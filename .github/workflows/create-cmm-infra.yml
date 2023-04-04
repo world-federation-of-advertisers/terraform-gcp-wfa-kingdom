@@ -39,6 +39,11 @@ on:
         required: false
         type: boolean
 
+      terraform_destroy:
+        default: true
+        required: false
+        type: boolean
+
 permissions:
   contents: read
   id-token: write
@@ -96,3 +101,9 @@ jobs:
         if: inputs.terraform_apply == true
         working-directory: ${{ env.ROOT_PATH }}
         run: terraform apply ${{ inputs.environment }}_tfplan
+
+      # Apply the plan Generated.
+      - name: Terraform Destroy
+        if: inputs.terraform_destroy == true
+        working-directory: ${{ env.ROOT_PATH }}
+        run: terraform destroy -auto-approve
