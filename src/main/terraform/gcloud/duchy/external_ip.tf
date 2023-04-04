@@ -16,14 +16,14 @@
 # This is step number 10.a as per document
 # https://github.com/world-federation-of-advertisers/cross-media-measurement/blob/main/docs/gke/duchy-deployment.md
 
-resource "google_compute_address" "worker_requisition_fulfillment_server1" {
-  name = "worker-requisition-fulfillment-server-ip1"
+resource "google_compute_address" "worker_requisition_fulfillment_server1a" {
+  name = "worker-requisition-fulfillment-server-ip1a"
   region = local.zone
   project = var.project
 }
 
-resource "google_compute_address" "worker_computation_control_server2" {
-  name = "worker-computation-control-server-ip2"
+resource "google_compute_address" "worker_computation_control_server1a" {
+  name = "worker-computation-control-server-ip1a"
   region = local.zone
   project = var.project
 }
