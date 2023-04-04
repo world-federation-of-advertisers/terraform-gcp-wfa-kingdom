@@ -31,8 +31,8 @@ locals {
     # configured as per the document.
     cluster_node_count = 3
     machine_type = "e2-highcpu-2"
-    min_node_count = 3
-    max_node_count = 6
+    min_node_count = 1 # TODO 3
+    max_node_count = 2 # TODO 6
   }
 
   kms = {
