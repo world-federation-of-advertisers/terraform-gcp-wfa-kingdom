@@ -52,8 +52,8 @@ resource "google_project_iam_binding" "gke_sa_iam_binding" {
 
 
 # Create Kubernetes service account
-resource "kubernetes_service_account" "internal_server" {
+/*resource "kubernetes_service_account" "internal_server" {
   metadata {
     name = "internal-server"
   }
-}
+}*/
