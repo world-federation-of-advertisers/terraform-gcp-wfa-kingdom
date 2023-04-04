@@ -25,9 +25,27 @@ resource "google_container_cluster" "primary" {
     key_name = local.kingdom.encryption_key
     state = local.kingdom.database_encryption_state
   }
-  
+
   cluster_autoscaling {
     enabled = local.kingdom.auto_scaling
+    dynamic "auto_provisioning_defaults" {
+      for_each = local.kingdom.auto_scaling ? [1] : []
+
+      content {
+        service_account = google_service_account.gke_sa
+        oauth_scopes = [
+          "https://www.googleapis.com/auth/cloud-platform"
+        ]
+      }
+    }
+    dynamic "resource_limits" {
+      for_each = local.kingdom.autoscaling_resource_limits
+      content {
+        resource_type = lookup(resource_limits.value, "resource_type")
+        minimum       = lookup(resource_limits.value, "minimum")
+        maximum       = lookup(resource_limits.value, "maximum")
+      }
+    }
   }
 }
 
