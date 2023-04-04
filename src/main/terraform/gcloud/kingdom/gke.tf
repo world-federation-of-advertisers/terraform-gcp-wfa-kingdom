@@ -26,7 +26,7 @@ resource "google_container_cluster" "primary" {
     key_name = "projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"
     state = "ENCRYPTED"
   }*/
-
+  remove_default_node_pool = true
   cluster_autoscaling {
     enabled = false # TODO change to true.
   }
