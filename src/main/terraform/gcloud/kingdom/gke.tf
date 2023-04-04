@@ -39,7 +39,7 @@ resource "google_container_cluster" "primary" {
       }
     }
     dynamic "resource_limits" {
-      for_each = local.kingdom.autoscaling_resource_limits
+      for_each = local.autoscaling_resource_limits
       content {
         resource_type = lookup(resource_limits.value, "resource_type")
         minimum       = lookup(resource_limits.value, "minimum")
