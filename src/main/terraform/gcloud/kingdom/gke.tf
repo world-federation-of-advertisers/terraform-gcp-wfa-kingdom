@@ -19,17 +19,13 @@ resource "google_container_cluster" "primary" {
 
   # the name will look like dev-halo-duchy-gke-cluster
   name     = local.kingdom.name
-  location = local.zone
+  location = "us-central1-a"
   initial_node_count = local.kingdom.cluster_node_count
   database_encryption {
     key_name = local.kingdom.encryption_key
     state = local.kingdom.database_encryption_state
   }
-  addons_config {
-    gce_persistent_disk_csi_driver_config {
-      enabled = false
-    }
-  }
+
   cluster_autoscaling {
     enabled = local.kingdom.auto_scaling
     dynamic "auto_provisioning_defaults" {
@@ -58,6 +54,7 @@ resource "google_container_node_pool" "data_server"{
   # the name will look like dev-halo-duchy-data-server
   name       = "${local.prefix}-data-server"
   cluster    = google_container_cluster.primary.id
+  location = "us-central1-a"
 
   autoscaling {
     max_node_count = local.kingdom.max_node_count
