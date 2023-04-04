@@ -30,9 +30,9 @@ locals {
   kingdom = {
     # configured as per the document.
     name = "${local.prefix}-gke-cluster"
-    cluster_node_count = 1
-    machine_type = "e2-highcpu-2" # use e2-highcpu-2
-    min_node_count = 1
+    cluster_node_count = 2 # TODO(wfa-dharmalingam): change it 3, once the quota increased
+    machine_type = "e2-highcpu-2"
+    min_node_count = 2 # TODO(wfa-dharmalingam): change it 3, once the quota increased
     max_node_count = 6
     auto_scaling = true
     database_encryption_state = "DECRYPTED" # state - (Required) ENCRYPTED or DECRYPTED
