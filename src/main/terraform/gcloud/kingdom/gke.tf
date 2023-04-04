@@ -27,7 +27,7 @@ resource "google_container_cluster" "primary" {
   }*/
 
   cluster_autoscaling {
-    enabled = true
+    enabled = false
   }
 }
 
