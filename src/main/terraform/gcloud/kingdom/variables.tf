@@ -30,12 +30,12 @@ locals {
   kingdom = {
     # configured as per the document.
     name = "${local.prefix}-gke-cluster"
-    cluster_node_count = 3
-    machine_type = "e2-highcpu-2"
-    min_node_count = 3
-    max_node_count = 6
+    cluster_node_count = 1
+    machine_type = "e2-micro" # use e2-highcpu-2
+    min_node_count = 1
+    max_node_count = 1
     auto_scaling = true
-    database_encryption_state = "ENCRYPTED"
+    database_encryption_state = "DECRYPTED" # state - (Required) ENCRYPTED or DECRYPTED
     encryption_key = "projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"
   }
 
