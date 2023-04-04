@@ -37,16 +37,16 @@ locals {
     auto_scaling = true
     database_encryption_state = "DECRYPTED" # state - (Required) ENCRYPTED or DECRYPTED
     encryption_key = "projects/${local.project}/locations/${local.zone}/keyRings/test-key-ring/cryptoKeys/k8s-secret"
-    autoscaling_resource_limits = local.kingdom.auto_scaling ? concat([{
-      resource_type = "cpu"
-      minimum       = 1
-      maximum       = 8
-    }, {
-      resource_type = "memory"
-      minimum       = 2
-      maximum       = 16
-    }]): []
   }
+  autoscaling_resource_limits = local.kingdom.auto_scaling ? concat([{
+    resource_type = "cpu"
+    minimum       = 1
+    maximum       = 8
+  }, {
+    resource_type = "memory"
+    minimum       = 2
+    maximum       = 16
+  }]): []
 
   kms = {
     ring_name = "test-key-ring"
