@@ -32,7 +32,7 @@ resource "google_container_cluster" "primary" {
       for_each = local.kingdom.auto_scaling ? [1] : []
 
       content {
-        service_account = google_service_account.gke_sa
+        service_account = google_service_account.gke_sa.email
         oauth_scopes = [
           "https://www.googleapis.com/auth/cloud-platform"
         ]
