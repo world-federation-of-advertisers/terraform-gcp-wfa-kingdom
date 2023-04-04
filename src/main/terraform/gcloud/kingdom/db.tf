@@ -19,7 +19,6 @@ resource "google_spanner_instance" "halo_spanner_db" {
   config       = "regional-${local.zone}"
   display_name = "${local.prefix}-spanner-instance"
   num_nodes    = local.spanner_db.num_nodes
-  deletion_protection = false
 }
 
 resource "google_spanner_database" "database" {
